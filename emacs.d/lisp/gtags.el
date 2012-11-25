@@ -374,6 +374,10 @@
   (if (looking-at gtags-symbol-regexp)
       (gtags-match-string 0) nil))
 
+;; Return a default tag filename
+;(defun gtags-current-file-token ()
+;  (
+
 ;; push current context to stack
 (defun gtags-push-context ()
   (setq gtags-buffer-stack (cons (current-buffer) gtags-buffer-stack))

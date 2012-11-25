@@ -51,6 +51,23 @@
 
 ; global
 (autoload 'gtags-mode "gtags" "" t)
-(add-hook 'c-mode-hook '(lambda () (gtags-mode t)))
+(add-hook 'c-mode-hook '(lambda() (gtags-mode t)))
+(add-hook 'c-mode-hook
+	(lambda()
+		(local-set-key (kbd "C-c t") 'gtags-find-tag)
+		(local-set-key (kbd "C-c b") 'gtags-pop-stack)
+		(local-set-key (kbd "C-c s") 'gtags-find-symbol)
+		(local-set-key (kbd "C-c i") 'gtags-find-file)
+	)
+)
 ; - dodac klawisze do tagow C-c t, pop C-c b
+
+; globalff - locate interface
+(require 'globalff)
+(global-set-key (kbd "C-c l") 'globalff)
+(setq globalff-search-delay 0.75)
+
+; find-file-in-repository
+(require 'find-file-in-repository)
+(global-set-key (kbd "C-c f") 'find-file-in-repository)
 
