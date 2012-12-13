@@ -1,9 +1,8 @@
 ; todo
 ; - tagi (global do c/c++ a do objc etags(?);
 ; - autouzupelnianie z clangiem;
-; - jabber;
 ; - jakis fajny diff do cvs i git;
-; - bookmarki;
+; - zrobic przadek z backupfiles;
 
 (defvar windowsp (string-match "windows" (symbol-name system-type)))
 
@@ -27,16 +26,25 @@
 ; solarized theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-theme")
 (load-theme 'solarized-dark t)
+; zmienic tlo na czarne w terminalu
 
 ; przebindowanie klawiszy
 (global-set-key (kbd "C-x C-b") 'buffer-menu)
 (global-set-key (kbd "C-c g") 'goto-line)
+(global-set-key (kbd "C-<tab>") 'next-multiframe-window)
+(global-set-key (kbd "C-;") 'shrink-window-horizontally)
+(global-set-key (kbd "C-'") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-:") 'shrink-window)
+(global-set-key (kbd "C-\"") 'enlarge-window)
 
 ; usuwamy welcome screen
 (setq inhibit-splash-screen t)
 
 ; ido-mode
 (ido-mode 1)
+
+; zmiana yes/no na y/n
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ; domyslny katalog
 (setq default-directory "~/" )
@@ -51,7 +59,7 @@
 ; ustawienia cc-mode
 (setq c-default-style "bsd" c-basic-offset 4)
 (setq-default c-basic-offset 8 tab-width 8 indent-tabs-mode t)
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+; (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 ; dodanie przelaczania sie pomiedzy naglowkiem/implementacja
 (add-hook 'c-mode-common-hook
@@ -62,6 +70,16 @@
 (custom-set-variables
  '(default-input-method "polish-slash"))
 
+; kodowanie latin2 tylko dla windy
+
+;(setq locale-coding-system 'cp1250)
+;(set-terminal-coding-system 'cp1250)
+;(set-keyboard-coding-system 'cp1250)
+;(set-selection-coding-system 'cp1250)
+;(prefer-coding-system 'cp1250)
+
+; pluginy
+
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 ; emacs-nav
@@ -70,6 +88,7 @@
 
 ; global
 (autoload 'gtags-mode "gtags" "" t)
+(setq gtags-ignore-case nil)
 (add-hook 'c-mode-common-hook '(lambda() (gtags-mode t)))
 (add-hook 'c-mode-common-hook
   (lambda()
@@ -90,3 +109,14 @@
 ; jabber.el
 (add-to-list 'load-path "~/.emacs.d/jabber/")
 (require 'jabber-autoloads)
+
+(setq jabber-account-list
+  '(("grabarz@gmail.com" 
+     (:network-server . "talk.google.com")
+        (:connection-type . ssl))))
+
+; yasnippet
+
+(add-to-list 'load-path "~/.emacs.d/yasnippet")
+(require 'yasnippet)
+(yas-global-mode 1)
