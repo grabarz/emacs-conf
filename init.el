@@ -19,7 +19,7 @@
 (global-font-lock-mode t)
 
 ; ustawienie menu i status bara
-(menu-bar-mode -1)
+(if (not window-system) (menu-bar-mode -1))
 (when (functionp 'tool-bar-mode) (tool-bar-mode -1))
 (when (functionp 'scroll-bar-mode) (scroll-bar-mode -1))
 
@@ -29,13 +29,16 @@
 ; zmienic tlo na czarne w terminalu
 
 ; przebindowanie klawiszy
-(global-set-key (kbd "C-x C-b") 'buffer-menu)
 (global-set-key (kbd "C-c g") 'goto-line)
 (global-set-key (kbd "C-<tab>") 'next-multiframe-window)
 (global-set-key (kbd "C-;") 'shrink-window-horizontally)
 (global-set-key (kbd "C-'") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-:") 'shrink-window)
 (global-set-key (kbd "C-\"") 'enlarge-window)
+(windmove-default-keybindings) ; poruszanie sie po oknach
+
+; ibuffer zamias buffer-menut
+(defalias 'list-buffers 'ibuffer)
 
 ; usuwamy welcome screen
 (setq inhibit-splash-screen t)
@@ -53,13 +56,17 @@
 (setq show-paren-delay 0)
 (show-paren-mode t)
 
+; nie potrzebuje nowej lini na koncu pliku
+(setq require-final-newline nil)
+
 ; ustawienia aspell'a
 (setq ispell-program-name "/opt/local/bin/aspell")
 
 ; ustawienia cc-mode
 (setq c-default-style "bsd" c-basic-offset 4)
-(setq-default c-basic-offset 8 tab-width 8 indent-tabs-mode t)
-; (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(setq-default c-basic-offset 4 tab-width 4 indent-tabs-mode t)
+(if windowsp
+   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)))
 
 ; dodanie przelaczania sie pomiedzy naglowkiem/implementacja
 (add-hook 'c-mode-common-hook
@@ -71,16 +78,26 @@
  '(default-input-method "polish-slash"))
 
 ; kodowanie latin2 tylko dla windy
-
-;(setq locale-coding-system 'cp1250)
-;(set-terminal-coding-system 'cp1250)
-;(set-keyboard-coding-system 'cp1250)
-;(set-selection-coding-system 'cp1250)
-;(prefer-coding-system 'cp1250)
-
+(when windowsp
+   (setq locale-coding-system 'cp1250)
+   (set-terminal-coding-system 'cp1250)
+   (set-keyboard-coding-system 'cp1250)
+   (set-selection-coding-system 'cp1250)
+   (prefer-coding-system 'cp1250)
+)
 ; pluginy
 
 (add-to-list 'load-path "~/.emacs.d/lisp/")
+
+; ustawienie direda
+(add-hook 'dired-mode-hook 'hl-line-mode)
+(setq dired-recursive-copies (quote always))
+(setq dired-recursive-deletes (quote top))
+(setq dired-dwim-target t)
+(require 'dired+)
+(if windowsp
+   (setq dired-listing-switches "-lahgo")
+   (setq dired-listing-switches "-lBha"))
 
 ; emacs-nav
 (require 'nav)
@@ -96,6 +113,7 @@
     (local-set-key (kbd "C-c b") 'gtags-pop-stack)
     (local-set-key (kbd "C-c s") 'gtags-find-symbol)
     (local-set-key (kbd "C-c f") 'gtags-find-file)))
+(add-hook 'gtags-select-mode-hook 'hl-line-mode)
 
 ; globalff - locate interface
 (require 'globalff)
@@ -116,7 +134,10 @@
         (:connection-type . ssl))))
 
 ; yasnippet
-
 (add-to-list 'load-path "~/.emacs.d/yasnippet")
 (require 'yasnippet)
-(yas-global-mode 1)
+;(setq yas/snippet-dirs '("~/.emacs.d/snippets"))
+(yas/reload-all)
+(add-hook 'c-mode-common-hook
+   '(lambda ()
+      (yas/minor-mode)))
