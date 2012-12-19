@@ -3,6 +3,7 @@
 ; - autouzupelnianie z clangiem;
 ; - jakis fajny diff do cvs i git;
 ; - zrobic przadek z backupfiles;
+;
 
 (defvar windowsp (string-match "windows" (symbol-name system-type)))
 
@@ -23,10 +24,16 @@
 (when (functionp 'tool-bar-mode) (tool-bar-mode -1))
 (when (functionp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-; solarized theme
+; themesy
 (add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-theme")
-(load-theme 'solarized-dark t)
-; zmienic tlo na czarne w terminalu
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'zenburn t)
+
+; funkcja odpalajaca zamiennik cmd.exe w windowsie
+(defun run-cmd-exe()
+  (interactive)
+  (let ((proc (start-process "console" nil "console.exe" "/C" "start" "console.exe")))
+	(set-process-query-on-exit-flag proc nil)))
 
 ; przebindowanie klawiszy
 (global-set-key (kbd "C-c g") 'goto-line)
@@ -36,6 +43,9 @@
 (global-set-key (kbd "C-:") 'shrink-window)
 (global-set-key (kbd "C-\"") 'enlarge-window)
 (windmove-default-keybindings) ; poruszanie sie po oknach
+(if windowsp
+  (global-set-key (kbd "<f2>") 'run-cmd-exe)
+  (global-set-key (kbd "<f2>") 'eshell))
 
 ; ibuffer zamias buffer-menut
 (defalias 'list-buffers 'ibuffer)
@@ -85,8 +95,8 @@
    (set-selection-coding-system 'cp1250)
    (prefer-coding-system 'cp1250)
 )
-; pluginy
 
+; pluginy
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 ; ustawienie direda
@@ -98,6 +108,10 @@
 (if windowsp
    (setq dired-listing-switches "-lahgo")
    (setq dired-listing-switches "-lBha"))
+
+; switch window do przelaczania okienek
+(if window-system
+	(require 'switch-window))
 
 ; emacs-nav
 (require 'nav)
