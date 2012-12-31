@@ -3,3 +3,13 @@ ls -la
 cd ..
 ls
 exit
+ls
+ls -als
+exit
+ls
+ls -la
+exit
+exit
+gitk
+exit
+exit
