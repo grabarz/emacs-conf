@@ -243,7 +243,7 @@
 
 ; vc - zostawienie tylko gita i hg
 (setq vc-cvs-stay-local nil)
-(setq vc-handled-backends '(Git Hg))
+(setq vc-handled-backends (quote (GIT Hg)))
 
 ; magit
 (add-to-list 'load-path "~/.emacs.d/magit")
