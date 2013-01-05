@@ -179,7 +179,7 @@
 ; kompilacja
 (setq compilation-read-command nil)
 
-(defun* get-closest-pathname (&optional (file (if windowsp "Makefile.mak" "Makefile")))
+(defun get-closest-pathname (&optional (file (if windowsp "Makefile.mak" "Makefile")))
   (let ((root (expand-file-name "/")))
     (expand-file-name file
     (loop
