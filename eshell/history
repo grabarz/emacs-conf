@@ -13,3 +13,12 @@ exit
 gitk
 exit
 exit
+exit
+make
+gmake
+make
+ls
+more Makefile
+make all
+exit
+exit

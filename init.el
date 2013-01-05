@@ -62,6 +62,7 @@
   (if (string-equal "*Ibuffer*" (buffer-name (current-buffer)))
     (kill-buffer "*Ibuffer*")
     (ibuffer))))
+(global-set-key (kbd "<f5>") 'compile) ; dodac opcje przerywania kompilacji
 
 ; podmapowanie f-ow pod cmd-n
 ;(when (and (eq system-type 'darwin) (eq window-system 'ns))
@@ -135,9 +136,71 @@
    (setq dired-listing-switches "-lahgo")
    (setq dired-listing-switches "-lBha"))
 
-; emacs-nav
-(require 'nav)
-(nav-disable-overeager-window-splitting) 
+(defun dired-ediff-marked-files ()
+  "Run ediff on marked ediff files."
+  (interactive)
+  (set 'marked-files (dired-get-marked-files))
+  (when (= (safe-length marked-files) 2)
+    (ediff-files (nth 0 marked-files) (nth 1 marked-files)))
+  (when (= (safe-length marked-files) 3)
+    (ediff3 (buffer-file-name (nth 0 marked-files))
+            (buffer-file-name (nth 1 marked-files)) 
+            (buffer-file-name (nth 2 marked-files)))))
+
+(add-hook 'dired-mode-hook
+  (lambda()
+    (local-set-key (kbd "C-d") 'dired-ediff-marked-files)))
+
+(defvar my-ediff-bwin-config nil "Window configuration before ediff.")
+(defcustom my-ediff-bwin-reg ?b
+  "*Register to be set up to hold `my-ediff-bwin-config'
+    configuration.")
+
+(defun my-ediff-bsh ()
+  "Function to be called before any buffers or window setup for
+    ediff."
+  (remove-hook 'ediff-quit-hook 'ediff-cleanup-mess)
+  (window-configuration-to-register my-ediff-bwin-reg))
+
+(defun my-ediff-aswh ()
+"setup hook used to remove the `ediff-cleanup-mess' function.  It causes errors."
+  (remove-hook 'ediff-quit-hook 'ediff-cleanup-mess))
+
+(defun my-ediff-qh ()
+  "Function to be called when ediff quits."
+  (remove-hook 'ediff-quit-hook 'ediff-cleanup-mess)
+  (ediff-cleanup-mess)
+  (jump-to-register my-ediff-bwin-reg))
+
+(add-hook 'ediff-before-setup-hook 'my-ediff-bsh)
+(add-hook 'ediff-after-setup-windows-hook 'my-ediff-aswh);
+(add-hook 'ediff-quit-hook 'my-ediff-qh)
+
+; kompilacja
+(setq compilation-read-command nil)
+
+(defun* get-closest-pathname (&optional (file (if windowsp "Makefile.mak" "Makefile")))
+  (let ((root (expand-file-name "/")))
+    (expand-file-name file
+    (loop
+      for d = default-directory then (expand-file-name ".." d)
+      if (file-exists-p (expand-file-name file d))
+      return d
+      if (equal d root)
+      return nil))))
+
+(defun setup-compilation()
+;  (interactive)
+  (set (make-local-variable 'compile-command)
+    (format (if windowsp "fmake -f %s" "gmake -f %s") (get-closest-pathname))))
+
+(add-hook 'dired-mode-hook 'setup-compilation)
+(add-hook 'c-mode-common-hook 'setup-compilation)
+
+; ediff
+
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-split-window-function 'split-window-horizontally)
 
 ; global
 (autoload 'gtags-mode "gtags" "" t)
@@ -180,7 +243,7 @@
 
 ; vc - zostawienie tylko gita i hg
 (setq vc-cvs-stay-local nil)
-(setq vc-handled-backends ('Git 'Hg))
+(setq vc-handled-backends '(Git Hg))
 
 ; magit
 (add-to-list 'load-path "~/.emacs.d/magit")
