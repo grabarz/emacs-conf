@@ -41,34 +41,23 @@
   (let ((proc (start-process "console" nil "console.exe" "/C" "start" "console.exe")))
 	(set-process-query-on-exit-flag proc nil)))
 
-; przebindowanie klawiszy
-(windmove-default-keybindings) ; poruszanie sie po oknach
-(global-set-key (kbd "C-c g") 'goto-line)
-(global-set-key (kbd "C-c a") 'ack)
-(global-set-key (kbd "C-c d") 'find-name-dired)
-(global-set-key (kbd "C-<tab>") 'other-window)
-(global-set-key (kbd "C-;") 'shrink-window-horizontally)
-(global-set-key (kbd "C-'") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-:") 'shrink-window)
-(global-set-key (kbd "C-\"") 'enlarge-window)
-(global-set-key (kbd "M-n") 'forward-paragraph)
-(global-set-key (kbd "M-p") 'backward-paragraph)
-(if windowsp
-  (global-set-key (kbd "<f2>") 'run-cmd-exe)
-  (global-set-key (kbd "<f2>") 'eshell))
-(global-set-key (kbd "<f3>") 'dired-jump)
-(global-set-key (kbd "<f4>") '(lambda ()
-  (interactive)
-  (if (string-equal "*Ibuffer*" (buffer-name (current-buffer)))
-    (kill-buffer "*Ibuffer*")
-    (ibuffer))))
-(global-set-key (kbd "<f5>") 'compile) ; dodac opcje przerywania kompilacji
+; ansi-term i funkcja odpalająca
+(require 'term) ; do bindowania potrzebne
+(defadvice ansi-term (after advise-ansi-term-coding-system)
+  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+(ad-activate 'ansi-term)
 
-; podmapowanie f-ow pod cmd-n
-;(when (and (eq system-type 'darwin) (eq window-system 'ns))
-;  (global-set-key (kbd "s-2") (key-binding (kbd "<f2>")))
-;  (global-set-key (kbd "s-3") (key-binding (kbd "<f3>")))
-;  (global-set-key (kbd "s-4") (key-binding (kbd "<f4>"))))
+(defun run-ansi-term()
+  (interactive)
+  (let ((term-str "*ansi-term*"))
+    (if (string-equal term-str (buffer-name (current-buffer)))
+      (previous-buffer)
+      (if (term-check-proc term-str)
+        (switch-to-buffer term-str)
+        (progn
+          (if (get-buffer term-str)
+            (kill-buffer term-str))
+          (ansi-term "/bin/bash"))))))
 
 ; winner do zapamietywania ustawienia okienek
 (when (fboundp 'winner-mode)
@@ -102,7 +91,7 @@
 (setq c-default-style "bsd" c-basic-offset 4)
 (setq-default c-basic-offset 4 tab-width 4 indent-tabs-mode t)
 (if windowsp
-   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)))
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)))
 
 ; dodanie przelaczania sie pomiedzy naglowkiem/implementacja
 (add-hook 'c-mode-common-hook
@@ -110,8 +99,8 @@
     (local-set-key (kbd "C-c o") 'ff-find-other-file)))
 
 ; domyslny input mode dla lokalizacji
-(custom-set-variables
- '(default-input-method "polish-slash"))
+;(custom-set-variables
+; '(default-input-method "polish-slash"))
 
 ; kodowanie latin2 tylko dla windy
 (when windowsp
@@ -157,17 +146,13 @@
     configuration.")
 
 (defun my-ediff-bsh ()
-  "Function to be called before any buffers or window setup for
-    ediff."
   (remove-hook 'ediff-quit-hook 'ediff-cleanup-mess)
   (window-configuration-to-register my-ediff-bwin-reg))
 
 (defun my-ediff-aswh ()
-"setup hook used to remove the `ediff-cleanup-mess' function.  It causes errors."
   (remove-hook 'ediff-quit-hook 'ediff-cleanup-mess))
 
 (defun my-ediff-qh ()
-  "Function to be called when ediff quits."
   (remove-hook 'ediff-quit-hook 'ediff-cleanup-mess)
   (ediff-cleanup-mess)
   (jump-to-register my-ediff-bwin-reg))
@@ -179,7 +164,7 @@
 ; kompilacja
 (setq compilation-read-command nil)
 
-(defun get-closest-pathname (&optional (file (if windowsp "Makefile.mak" "Makefile")))
+(defun* get-closest-pathname (&optional (file (if windowsp "Makefile.mak" "Makefile")))
   (let ((root (expand-file-name "/")))
     (expand-file-name file
     (loop
@@ -198,7 +183,6 @@
 (add-hook 'c-mode-common-hook 'setup-compilation)
 
 ; ediff
-
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
 
@@ -243,8 +227,40 @@
 
 ; vc - zostawienie tylko gita i hg
 (setq vc-cvs-stay-local nil)
-(setq vc-handled-backends (quote (GIT Hg)))
+(setq vc-handled-backends (quote (Git Hg)))
 
 ; magit
 (add-to-list 'load-path "~/.emacs.d/magit")
 (require 'magit)
+
+; przebindowanie klawiszy
+(windmove-default-keybindings) ; poruszanie sie po oknach
+(global-set-key (kbd "C-c g") 'goto-line)
+(global-set-key (kbd "C-c a") 'ack)
+(global-set-key (kbd "C-c d") 'find-name-dired)
+(global-set-key (kbd "C-c m") 'magit-status)
+(global-set-key (kbd "C-<tab>") 'other-window)
+(global-set-key (kbd "C-;") 'shrink-window-horizontally)
+(global-set-key (kbd "C-'") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-:") 'shrink-window)
+(global-set-key (kbd "C-\"") 'enlarge-window)
+(global-set-key (kbd "M-n") 'forward-paragraph)
+(global-set-key (kbd "M-p") 'backward-paragraph)
+
+(if windowsp
+  (global-set-key (kbd "<f2>") 'run-cmd-exe)
+  (global-set-key (kbd "<f2>") 'run-ansi-term))
+
+(global-set-key (kbd "<f3>") 'dired-jump)
+(global-set-key (kbd "<f4>") '(lambda ()
+  (interactive)
+  (if (string-equal "*Ibuffer*" (buffer-name (current-buffer)))
+    (kill-buffer "*Ibuffer*")
+    (ibuffer))))
+(global-set-key (kbd "<f5>") 'compile) ; dodac opcje przerywania kompilacji
+
+; podmapowanie f-ow pod cmd-n
+;(when (and (eq system-type 'darwin) (eq window-system 'ns))
+;  (global-set-key (kbd "s-2") (key-binding (kbd "<f2>")))
+;  (global-set-key (kbd "s-3") (key-binding (kbd "<f3>")))
+;  (global-set-key (kbd "s-4") (key-binding (kbd "<f4>"))))
