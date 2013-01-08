@@ -1,7 +1,6 @@
 ; todo
 ; - tagi (global do c/c++ a do objc etags(?);
 ; - autouzupelnianie z clangiem;
-; - jakis fajny diff do cvs i git;
 ; - zrobic przadek z backupfiles;
 ;
 
@@ -62,6 +61,10 @@
 ; winner do zapamietywania ustawienia okienek
 (when (fboundp 'winner-mode)
   (winner-mode 1))
+
+; nav
+(require 'ack)
+(require 'nav)
 
 ; usuwamy welcome screen
 (setq inhibit-splash-screen t)
