@@ -16,7 +16,7 @@
 
 ; ustawienie czcionki
 (if windowsp
-    (add-to-list 'default-frame-alist '(font . "Monaco-7"))
+    (add-to-list 'default-frame-alist '(font . "Monaco-7.5"))
     (add-to-list 'default-frame-alist '(font . "Monaco-9")))
 
 (global-font-lock-mode t)
@@ -267,3 +267,65 @@
 ;  (global-set-key (kbd "s-2") (key-binding (kbd "<f2>")))
 ;  (global-set-key (kbd "s-3") (key-binding (kbd "<f3>")))
 ;  (global-set-key (kbd "s-4") (key-binding (kbd "<f4>"))))
+
+; wanderlust
+
+(setq user-mail-address "grabarz@gmail.com")
+     (setq user-full-name "Piotr Grabowski")
+
+;; wanderlust
+(add-to-list 'load-path "~/.emacs.d/wanderlust/elmo")
+(add-to-list 'load-path "~/.emacs.d/wanderlust/wl")
+
+(autoload 'wl "wl" "Wanderlust" t)
+(autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
+(autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
+
+;; IMAP
+(setq elmo-imap4-default-server "imap.gmail.com")
+(setq elmo-imap4-default-user "<accountname>@gmail.com") 
+(setq elmo-imap4-default-authenticate-type 'clear) 
+(setq elmo-imap4-default-port '993)
+(setq elmo-imap4-default-stream-type 'ssl)
+
+(setq elmo-imap4-use-modified-utf7 t) 
+
+;; SMTP
+(setq wl-smtp-connection-type 'starttls)
+(setq wl-smtp-posting-port 587)
+(setq wl-smtp-authenticate-type "plain")
+(setq wl-smtp-posting-user "mattofransen")
+(setq wl-smtp-posting-server "smtp.gmail.com")
+(setq wl-local-domain "gmail.com")
+
+(setq wl-default-folder "%inbox")
+(setq wl-default-spec "%")
+(setq wl-draft-folder "%[Gmail]/Drafts") ; Gmail IMAP
+(setq wl-trash-folder "%[Gmail]/Trash")
+
+(setq wl-folder-check-async t) 
+
+(setq elmo-imap4-use-modified-utf7 t)
+
+(autoload 'wl-user-agent-compose "wl-draft" nil t)
+(if (boundp 'mail-user-agent)
+    (setq mail-user-agent 'wl-user-agent))
+(if (fboundp 'define-mail-user-agent)
+    (define-mail-user-agent
+      'wl-user-agent
+      'wl-user-agent-compose
+      'wl-draft-send
+      'wl-draft-kill
+      'mail-send-hook))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(auth-source-save-behavior nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
