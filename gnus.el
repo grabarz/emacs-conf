@@ -22,6 +22,7 @@ smtpmail-debug-verb t)
 
 (setq gnus-large-newsgroup 'nil)
 (setq gnus-ignored-newsgroups "")
+;(setq gnus-group-line-format "%P%M%St%(%g%) (%y)n")
 
 ; http://www.cataclysmicmutation.com/2010/11/multiple-gmail-accounts-in-gnus/#more-12
 (setq gnus-parameters
@@ -35,20 +36,27 @@ smtpmail-debug-verb t)
    ; (expiry-target . delete) 
     (expiry-wait . never))))
 
+(setq-default
+  gnus-summary-line-format "%U%R%z %(%&user-date;  %-15,15f  %B%s%)\n"
+  gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
+  gnus-summary-thread-gathering-function 'gnus-gather-threads-by-references
+  gnus-sum-thread-tree-false-root ""
+  gnus-sum-thread-tree-indent ""
+  gnus-sum-thread-tree-leaf-with-other "-> "
+  gnus-sum-thread-tree-root ""
+  gnus-sum-thread-tree-single-leaf "|_ "
+  gnus-sum-thread-tree-vertical "|")
+
 ;(setq gnus-summary-line-format "%U%R%z %(%&user-date;  %-15,15f  %B%s%)\n")
 ;(setq gnus-summary-line-forma
 ;  "%1{%U%R%z: %}%2{%d%}%5{ %[%4i%] %}%4{%-24,24n%}%6{%-4,4ur%}%5{| %}%(%1{%B%}%s%)n")
 
 ;(setq gnus-summary-line-format "%ua%U%R%[%&user-date;: %-15,15f%] %B%s\n")
 
-(when window-system
-(setq
-gnus-sum-thread-tree-root "● "
-gnus-sum-thread-tree-false-root "▷ "
-gnus-sum-thread-tree-single-indent ""
-gnus-sum-thread-tree-leaf-with-other "├─►"
-gnus-sum-thread-tree-vertical "│ "
-gnus-sum-thread-tree-single-leaf "└─►"))
+; wyświetlanie maili html'owych przez w3m
+(setq mm-text-html-renderer 'w3m)
+(setq mm-inline-text-html-with-images t)
+(setq mm-inline-text-html-with-w3m-keymap nil)
 
 ; nowe maile na samej górze
 (setq gnus-thread-sort-functions
