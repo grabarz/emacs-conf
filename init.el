@@ -147,26 +147,26 @@
   (lambda()
     (local-set-key (kbd "C-d") 'dired-ediff-marked-files)))
 
-(defvar my-ediff-bwin-config nil "Window configuration before ediff.")
-(defcustom my-ediff-bwin-reg ?b
-  "*Register to be set up to hold `my-ediff-bwin-config'
+(defvar grabarz-ediff-bwin-config nil "Window configuration before ediff.")
+(defcustom grabarz-ediff-bwin-reg ?b
+  "*Register to be set up to hold `grabarz-ediff-bwin-config'
     configuration.")
 
-(defun my-ediff-bsh ()
+(defun grabarz-ediff-bsh ()
   (remove-hook 'ediff-quit-hook 'ediff-cleanup-mess)
-  (window-configuration-to-register my-ediff-bwin-reg))
+  (window-configuration-to-register grabarz-ediff-bwin-reg))
 
-(defun my-ediff-aswh ()
+(defun grabarz-ediff-aswh ()
   (remove-hook 'ediff-quit-hook 'ediff-cleanup-mess))
 
-(defun my-ediff-qh ()
+(defun grabarz-ediff-qh ()
   (remove-hook 'ediff-quit-hook 'ediff-cleanup-mess)
   (ediff-cleanup-mess)
-  (jump-to-register my-ediff-bwin-reg))
+  (jump-to-register grabarz-ediff-bwin-reg))
 
-(add-hook 'ediff-before-setup-hook 'my-ediff-bsh)
-(add-hook 'ediff-after-setup-windows-hook 'my-ediff-aswh);
-(add-hook 'ediff-quit-hook 'my-ediff-qh)
+(add-hook 'ediff-before-setup-hook 'grabarz-ediff-bsh)
+(add-hook 'ediff-after-setup-windows-hook 'grabarz-ediff-aswh);
+(add-hook 'ediff-quit-hook 'grabarz-ediff-qh)
 
 ; kompilacja
 (setq compilation-read-command nil)
@@ -298,3 +298,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+; grabarz-wm
+(require 'grabarz-wm)
