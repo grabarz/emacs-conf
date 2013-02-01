@@ -75,6 +75,7 @@
 
 ; ido-mode
 (ido-mode 1)
+(setq ido-enable-last-directory-history nil)
 
 ; zmiana yes/no na y/n
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -301,3 +302,30 @@
 
 ; grabarz-wm
 (require 'grabarz-wm)
+
+(setq grabarz-main-window
+	  (make-grabarz-wm-window
+	   :window (selected-window)))
+(setq grabarz-dired-window
+	  (make-grabarz-wm-window
+	   :split 'hleft
+	   :onparent t
+	   :size 15
+	   :parent grabarz-main-window))
+(setq grabarz-console-window
+	  (make-grabarz-wm-window
+	   :split 'vbottom
+	   :size 20
+	   :parent grabarz-main-window))
+(setq grabarz-console-net-window
+	  (make-grabarz-wm-window
+	   :split 'hright
+	   :size 50
+	   :parent grabarz-console-window))
+
+(setq grabarz-wm-window-buffer-dict
+	  '(("*Messages*" . grabarz-console-window) ; ' ?
+		("*Gnus*" . grabarz-console-net-window)
+		("*" . grabarz-main-window)))
+
+
