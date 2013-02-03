@@ -148,6 +148,14 @@
   (lambda()
     (local-set-key (kbd "C-d") 'dired-ediff-marked-files)))
 
+(add-hook 'dired-mode-hook 'dired-rename-buffer)
+(defun dired-rename-buffer ()
+  "change buffer name to begin with *D"
+  (let ((name (buffer-name)))
+    (if (not (string-match "*D: $" name))
+        (rename-buffer (concat "*D: " name) t))))
+
+; ediff
 (defvar grabarz-ediff-bwin-config nil "Window configuration before ediff.")
 (defcustom grabarz-ediff-bwin-reg ?b
   "*Register to be set up to hold `grabarz-ediff-bwin-config'
@@ -182,8 +190,7 @@
       if (equal d root)
       return nil))))
 
-(defun setup-compilation()
-;  (interactive)
+(defun setup-compilation ()
   (set (make-local-variable 'compile-command)
     (format (if windowsp "fmake -f %s" "gmake -f %s") (get-closest-pathname))))
 
@@ -207,9 +214,9 @@
 (add-hook 'gtags-select-mode-hook 'hl-line-mode)
 
 ; globalff - locate interface
-(require 'globalff)
-(global-set-key (kbd "C-c l") 'globalff)
-(setq globalff-search-delay 0.75)
+;; (require 'globalff)
+;; (global-set-key (kbd "C-c l") 'globalff)
+;; (setq globalff-search-delay 0.75)
 
 ; find-file-in-repository
 ;(require 'find-file-in-repository)
@@ -225,13 +232,13 @@
         (:connection-type . ssl))))
 
 ; yasnippet
-(add-to-list 'load-path "~/.emacs.d/yasnippet")
-(require 'yasnippet)
-;(setq yas/snippet-dirs '("~/.emacs.d/snippets"))
-(yas/reload-all)
-(add-hook 'c-mode-common-hook
-   '(lambda ()
-      (yas/minor-mode)))
+;(add-to-list 'load-path "~/.emacs.d/yasnippet")
+;(require 'yasnippet)
+;;(setq yas/snippet-dirs '("~/.emacs.d/snippets"))
+;(yas/reload-all)
+;(add-hook 'c-mode-common-hook
+;   '(lambda ()
+;      (yas/minor-mode)))
 
 ; vc - zostawienie tylko gita i hg
 (setq vc-cvs-stay-local nil)
@@ -278,54 +285,30 @@
 ;  (global-set-key (kbd "s-4") (key-binding (kbd "<f4>"))))
 
 ; poczta
-(require 'gnus-cite)
+;; (require 'gnus-cite)
 
-(setq user-mail-address "grabarz@gmail.com"
-  user-full-name "Piotr Grabowski"
-  message-cite-function 'message-cite-original-without-signature)
+;; (setq user-mail-address "grabarz@gmail.com"
+;;   user-full-name "Piotr Grabowski"
+;;   message-cite-function 'message-cite-original-without-signature)
 
-;(setq message-citation-line-function 'mak-citation-line-sep)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(auth-source-save-behavior nil)
- '(smtpmail-smtp-server "smtp.gmail.com")
- '(smtpmail-smtp-service 25))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; ;(setq message-citation-line-function 'mak-citation-line-sep)
+;; (custom-set-variables
+;;  ;; custom-set-variables was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(auth-source-save-behavior nil)
+;;  '(smtpmail-smtp-server "smtp.gmail.com")
+;;  '(smtpmail-smtp-service 25))
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  )
 
 ; grabarz-wm
 (require 'grabarz-wm)
 
-(setq grabarz-main-window
-	  (make-grabarz-wm-window
-	   :window (selected-window)))
-(setq grabarz-dired-window
-	  (make-grabarz-wm-window
-	   :split 'hleft
-	   :onparent t
-	   :size 15
-	   :parent grabarz-main-window))
-(setq grabarz-console-window
-	  (make-grabarz-wm-window
-	   :split 'vbottom
-	   :size 20
-	   :parent grabarz-main-window))
-(setq grabarz-console-net-window
-	  (make-grabarz-wm-window
-	   :split 'hright
-	   :size 50
-	   :parent grabarz-console-window))
-
-(setq grabarz-wm-window-buffer-dict
-	  '(("*Messages*" . grabarz-console-window) ; ' ?
-		("*Gnus*" . grabarz-console-net-window)
-		("*" . grabarz-main-window)))
-
-
+(setq grabarz-wm-console-regexp '("*Completions*" "*Help*" "*grep*"))
+(grabarz-wm)
