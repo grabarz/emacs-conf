@@ -3,9 +3,6 @@
 (defcustom grabarz-wm-console-window nil
   "*Okno konsoli. Jezeli rowne nil to okno nie istnieje.")
 
-(defcustom grabarz-wm-console-window-config nil
-  "*Konfiguracja okna konsoli.")
-
 (defcustom grabarz-wm-console-window-height 33
   "*Wysokosc konsoli w %.")
 
@@ -45,12 +42,20 @@
 				(setq win (previous-window win))))
 		(setq win (selected-window))))
 	(set-window-buffer win buffer-or-name)
-	(set-window-dedicated-p grabarz-wm-console-window 0)
+	(if (equal grabarz-wm-console-window win)
+		(set-window-dedicated-p grabarz-wm-console-window 0)) ; tu dodac config
 	win))
 
 (defun grabarz-wm-next-buffer ()
   "*Otwiera nastepny bufor odpowiedni dla biezacego okna."
-  (interactive))
+  (interactive)
+  (let ((next (next-buffer))
+		(curr (current-buffer)))
+	(catch 'stop
+	(while (not (equal next curr))
+	  (if (not (grabarz-wm-check-regexp grabarz-wm-console-regexp (buffer-name next)))
+		  (throw 'stop))
+		(setq next (next-buffer))))))
 
 (defun grabarz-wm-prev-buffer ()
   "*Otwiera poprzedni bufor odpowiedni dla biezacego okna."
@@ -75,6 +80,11 @@
   "*Runs grabarz-wm - window manager for emacs."
   (interactive)
   (setq display-buffer-function 'grabarz-wm-display-buffer-function))
+
+(defun grabarz-wm-quit ()
+  "*Stops grabarz-wm."
+  (interactive)
+  (setq display-buffer-function nil))
 
 (provide 'grabarz-wm)
 

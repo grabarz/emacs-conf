@@ -62,13 +62,8 @@
             (kill-buffer term-str))
           (ansi-term "/bin/bash"))))))
 
-; winner do zapamietywania ustawienia okienek
-(when (fboundp 'winner-mode)
-  (winner-mode 1))
-
-; nav
+; ack
 (require 'ack)
-(require 'nav)
 
 ; usuwamy welcome screen
 (setq inhibit-splash-screen t)
@@ -258,13 +253,17 @@
 (global-set-key (kbd "C-c a") 'ack)
 (global-set-key (kbd "C-c d") 'find-name-dired)
 (global-set-key (kbd "C-c m") 'magit-status)
-(global-set-key (kbd "C-<tab>") 'other-window)
+(global-set-key (kbd "C-c e") 'vc-ediff)
 (global-set-key (kbd "C-;") 'shrink-window-horizontally)
 (global-set-key (kbd "C-'") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-:") 'shrink-window)
 (global-set-key (kbd "C-\"") 'enlarge-window)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "M-p") 'backward-paragraph)
+(global-set-key (kbd "C-<tab>") 'grabarz-wm-other-window)
+(global-set-key (kbd "M-[") 'grabarz-wm-prev-buffer)
+(global-set-key (kbd "M-]") 'grabarz-wm-next-buffer)
+(global-set-key (kbd "C-§") 'grabarz-wm-prev-console-show-activate-hide)
 
 (if windowsp
   (global-set-key (kbd "<f2>") 'run-cmd-exe)
