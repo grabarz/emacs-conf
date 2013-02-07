@@ -42,20 +42,7 @@
 				(setq win (previous-window win))))
 		(setq win (selected-window))))
 	(set-window-buffer win buffer-or-name)
-	(if (equal grabarz-wm-console-window win)
-		(set-window-dedicated-p grabarz-wm-console-window 0)) ; tu dodac config
 	win))
-
-(defun grabarz-wm-next-buffer ()
-  "*Otwiera nastepny bufor odpowiedni dla biezacego okna."
-  (interactive)
-  (let ((next (next-buffer))
-		(curr (current-buffer)))
-	(catch 'stop
-	(while (not (equal next curr))
-	  (if (not (grabarz-wm-check-regexp grabarz-wm-console-regexp (buffer-name next)))
-		  (throw 'stop))
-		(setq next (next-buffer))))))
 
 (defun grabarz-wm-prev-buffer ()
   "*Otwiera poprzedni bufor odpowiedni dla biezacego okna."

@@ -242,10 +242,11 @@
 ; magit
 (add-to-list 'load-path "~/.emacs.d/magit")
 (require 'magit)
+(require 'magit-blame)
 
 ; w3m - przeniesc do gnus-mode
-(add-to-list 'load-path "~/.emacs.d/w3m/")
-(require 'w3m)
+;(add-to-list 'load-path "~/.emacs.d/w3m/")
+;(require 'w3m)
 
 ; przebindowanie klawiszy
 (windmove-default-keybindings) ; poruszanie sie po oknach
@@ -253,6 +254,7 @@
 (global-set-key (kbd "C-c a") 'ack)
 (global-set-key (kbd "C-c d") 'find-name-dired)
 (global-set-key (kbd "C-c m") 'magit-status)
+(global-set-key (kbd "C-c b") 'magit-blame-mode)
 (global-set-key (kbd "C-c e") 'vc-ediff)
 (global-set-key (kbd "C-;") 'shrink-window-horizontally)
 (global-set-key (kbd "C-'") 'enlarge-window-horizontally)
@@ -261,8 +263,8 @@
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "C-<tab>") 'grabarz-wm-other-window)
-(global-set-key (kbd "M-[") 'grabarz-wm-prev-buffer)
-(global-set-key (kbd "M-]") 'grabarz-wm-next-buffer)
+(global-set-key (kbd "M-[") 'previous-buffer)
+(global-set-key (kbd "M-]") 'next-buffer)
 (global-set-key (kbd "C-§") 'grabarz-wm-prev-console-show-activate-hide)
 
 (if windowsp
