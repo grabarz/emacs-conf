@@ -20,8 +20,8 @@
 
 ; ustawienie czcionki
 (if windowsp
-    (add-to-list 'default-frame-alist '(font . "Monaco-7.5"))
-    (add-to-list 'default-frame-alist '(font . "Monaco-9")))
+    (add-to-list 'default-frame-alist '(font . "Consolas-8"))
+    (add-to-list 'default-frame-alist '(font . "Consolas-9")))
 
 (global-font-lock-mode t)
 
