@@ -255,7 +255,7 @@
 (global-set-key (kbd "C-c d") 'find-name-dired)
 (global-set-key (kbd "C-c m") 'magit-status)
 (global-set-key (kbd "C-c b") 'magit-blame-mode)
-(global-set-key (kbd "C-c e") 'vc-ediff)
+(global-set-key (kbd "C-c e") 'vc-version-ediff)
 (global-set-key (kbd "C-;") 'shrink-window-horizontally)
 (global-set-key (kbd "C-'") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-:") 'shrink-window)

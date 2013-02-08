@@ -42,6 +42,8 @@
 				(setq win (previous-window win))))
 		(setq win (selected-window))))
 	(set-window-buffer win buffer-or-name)
+	(if (equal grabarz-wm-console-window win)
+		(set-window-dedicated-p grabarz-wm-console-window 0)) ; tu dodac config
 	win))
 
 (defun grabarz-wm-prev-buffer ()
