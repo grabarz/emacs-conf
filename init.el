@@ -101,6 +101,17 @@
   (lambda() 
     (local-set-key (kbd "C-c o") 'ff-find-other-file)))
 
+; funkcja kopiujaca nazwe edytowanego pliku
+(defun grabarz-copy-file-name ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+
 ; domyslny input mode dla lokalizacji
 ;(custom-set-variables
 ; '(default-input-method "polish-slash"))
@@ -256,6 +267,7 @@
 (global-set-key (kbd "C-c m") 'magit-status)
 (global-set-key (kbd "C-c b") 'magit-blame-mode)
 (global-set-key (kbd "C-c e") 'vc-version-ediff)
+(global-set-key (kbd "C-c p") 'grabarz-copy-file-name)
 (global-set-key (kbd "C-;") 'shrink-window-horizontally)
 (global-set-key (kbd "C-'") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-:") 'shrink-window)
