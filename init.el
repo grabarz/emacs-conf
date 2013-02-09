@@ -13,15 +13,20 @@
 
 (defvar windowsp (string-match "windows" (symbol-name system-type)))
 
+(if (not windowsp)
+	(progn
+	  (setq path "/bin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/mysql/bin:/opt/local/bin")
+	  (setenv "PATH" path)))
+
 ; ustawienie rozmiarow okienka
 (if windowsp
     (setq initial-frame-alist `((left . 0) (top . 0) (width . 232) (height . 63)))
-    (setq initial-frame-alist `((left . 0) (top . 0) (width . 210) (height . 62))))
+    (setq initial-frame-alist `((left . 0) (top . 0) (width . 210) (height . 68))))
 
 ; ustawienie czcionki
 (if windowsp
     (add-to-list 'default-frame-alist '(font . "Consolas-8"))
-    (add-to-list 'default-frame-alist '(font . "Consolas-9")))
+    (add-to-list 'default-frame-alist '(font . "Consolas-11")))
 
 (global-font-lock-mode t)
 
@@ -323,5 +328,5 @@
 ; grabarz-wm
 (require 'grabarz-wm)
 
-(setq grabarz-wm-console-regexp '("*Completions*" "*Help*" "*grep*"))
+(setq grabarz-wm-console-regexp '("*Completions*" "*Help*" "*grep*" "*compilation*"))
 (grabarz-wm)
