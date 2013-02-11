@@ -21,12 +21,12 @@
 ; ustawienie rozmiarow okienka
 (if windowsp
     (setq initial-frame-alist `((left . 0) (top . 0) (width . 232) (height . 63)))
-    (setq initial-frame-alist `((left . 0) (top . 0) (width . 210) (height . 68))))
+    (setq initial-frame-alist `((left . 0) (top . 0) (width . 251) (height . 74))))
 
 ; ustawienie czcionki
 (if windowsp
     (add-to-list 'default-frame-alist '(font . "Consolas-8"))
-    (add-to-list 'default-frame-alist '(font . "Consolas-11")))
+    (add-to-list 'default-frame-alist '(font . "Consolas-10")))
 
 (global-font-lock-mode t)
 
@@ -55,7 +55,7 @@
   (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
 (ad-activate 'ansi-term)
 
-(defun run-ansi-term()
+(defun grabarz-run-ansi-term ()
   (interactive)
   (let ((term-str "*ansi-term*"))
     (if (string-equal term-str (buffer-name (current-buffer)))
@@ -66,6 +66,14 @@
           (if (get-buffer term-str)
             (kill-buffer term-str))
           (ansi-term "/bin/bash"))))))
+
+;(require 'eshell)
+
+(defun grabarz-run-eshell ()
+  (interactive)
+  (if (string-equal "*eshell*" (buffer-name (current-buffer)))
+	  (previous-buffer)
+	(eshell)))
 
 ; ack
 (require 'ack)
@@ -286,7 +294,7 @@
 
 (if windowsp
   (global-set-key (kbd "<f2>") 'run-cmd-exe)
-  (global-set-key (kbd "<f2>") 'run-ansi-term))
+  (global-set-key (kbd "<f2>") 'grabarz-run-eshell))
 
 (global-set-key (kbd "<f3>") 'dired-jump)
 (global-set-key (kbd "<f4>") '(lambda ()
@@ -328,5 +336,7 @@
 ; grabarz-wm
 (require 'grabarz-wm)
 
-(setq grabarz-wm-console-regexp '("*Completions*" "*Help*" "*grep*" "*compilation*"))
+(setq grabarz-wm-console-regexp
+	  '("*Completions*" "*Help*" "*grep*" "*compilation*"
+		"*ansi-term*" "*Backtrace*" "*eshell*"))
 (grabarz-wm)
