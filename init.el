@@ -294,8 +294,9 @@
 (global-set-key (kbd "C-<tab>") 'grabarz-wm-other-window)
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
-(global-set-key (kbd "C-§") 'grabarz-wm-prev-console-show-activate-hide)
-
+(if windowsp
+	(global-set-key (kbd "C-`") 'grabarz-wm-console-activate-hide)
+  (global-set-key (kbd "C-§") 'grabarz-wm-console-activate-hide))
 (if windowsp
   (global-set-key (kbd "<f2>") 'run-cmd-exe)
   (global-set-key (kbd "<f2>") 'grabarz-run-eshell))
@@ -341,6 +342,6 @@
 (require 'grabarz-wm)
 
 (setq grabarz-wm-console-regexp
-	  '("*Completions*" "*Help*" "*grep*" "*compilation*"
+	  '("*Completions*" "*Ido Completions*" "*Help*" "*grep*" "*compilation*"
 		"*ansi-term*" "*Backtrace*" "*eshell*"))
 (grabarz-wm)

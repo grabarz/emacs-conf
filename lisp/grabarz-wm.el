@@ -46,24 +46,21 @@
 		(set-window-dedicated-p grabarz-wm-console-window 0)) ; tu dodac config
 	win))
 
-(defun grabarz-wm-prev-buffer ()
-  "*Otwiera poprzedni bufor odpowiedni dla biezacego okna."
-  (interactive))
 
 (defun grabarz-wm-other-window ()
   "*Przeskakuje do nastepnego okna ktore nie jest konsola"
-  (interactive))
+  (interactive)
+  (other-window 1)
+  (if (equal (selected-window) grabarz-wm-console-window)
+	  (other-window 1)))
 
-;; (defun grabarz-wm-console-show-activate-hide ()
-;;   "*Pokazuje konsole z pierwszym pasujacym buforem."
-;;   (interactive)
-;;   (cond ((equal grabarz-wm-console-window (selected-window)) )
-;; 		((window-live-p grabarz-wm-console-window)
-;; 		 (select-window grabarz-wm-console-window))
-;; 		(t
-;; 		 ()
-;; 		 ()
-;;       ())))
+(defun grabarz-wm-console-activate-hide ()
+   "*Pokazuje konsole z pierwszym pasujacym buforem."
+   (interactive)
+   (if (equal (selected-window) grabarz-wm-console-window)
+	   (delete-window grabarz-wm-console-window)
+	 (if (window-live-p grabarz-wm-console-window)
+		 (select-window grabarz-wm-console-window))))
 
 (defun grabarz-wm ()
   "*Runs grabarz-wm - window manager for emacs."
