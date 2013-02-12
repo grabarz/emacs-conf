@@ -7,16 +7,20 @@
 ; pluginy
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
-(setq exec-path
-  (append exec-path
-    '("/bin" "/usr/bin" "/opt/local/bin")))
-
 (defvar windowsp (string-match "windows" (symbol-name system-type)))
 
+; ustawienia sciezek specjalnie dla ns
 (if (not windowsp)
-	(progn
-	  (setq path "/bin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/mysql/bin:/opt/local/bin")
-	  (setenv "PATH" path)))
+	(let ((grabarz-path
+		   '("/bin"
+			 "/sbin"
+			 "/usr/bin"
+			 "/usr/sbin"
+			 "/usr/local/bin"
+			 "/opt/local/bin"
+			 "/opt/local/sbin")))
+	  (setq exec-path (append exec-path grabarz-path))
+	  (setenv "PATH" (mapconcat 'identity grabarz-path ":"))))
 
 ; ustawienie rozmiarow okienka
 (if windowsp
