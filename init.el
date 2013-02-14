@@ -285,6 +285,7 @@
 (global-set-key (kbd "C-c b") 'magit-blame-mode)
 (global-set-key (kbd "C-c e") 'vc-version-ediff)
 (global-set-key (kbd "C-c p") 'grabarz-copy-file-name)
+(global-set-key (kbd "C-%") 'split-window-horizontaly)
 (global-set-key (kbd "C-;") 'shrink-window-horizontally)
 (global-set-key (kbd "C-'") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-:") 'shrink-window)
@@ -342,6 +343,12 @@
 (require 'grabarz-wm)
 
 (setq grabarz-wm-console-regexp
-	  '("*Completions*" "*Ido Completions*" "*Help*" "*grep*" "*compilation*"
-		"*ansi-term*" "*Backtrace*" "*eshell*"))
+	  '("*Completions*"
+		"*Ido Completions*"
+		"*Help*"
+		"*grep*"
+		"*compilation*"
+		"*ansi-term*"
+		"*Backtrace*"
+		"*eshell*"))
 (grabarz-wm)
