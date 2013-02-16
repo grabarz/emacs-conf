@@ -272,6 +272,12 @@
 (require 'magit)
 (require 'magit-blame)
 
+; slime
+(add-to-list 'load-path "~/.emacs.d/slime/")
+(setq inferior-lisp-program "/opt/local/bin/sbcl")
+(require 'slime)
+(slime-setup)
+
 ; w3m - przeniesc do gnus-mode
 ;(add-to-list 'load-path "~/.emacs.d/w3m/")
 ;(require 'w3m)
