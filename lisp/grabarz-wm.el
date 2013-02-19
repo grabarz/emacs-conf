@@ -24,8 +24,6 @@
 		 (wh (round (* (/ (- 100 (float grabarz-wm-console-window-height)) 100) th))))
 	(setq grabarz-wm-console-window (split-window (frame-root-window) wh nil))))
 
-; interfejs
-
 (defun grabarz-wm-display-buffer-function (buffer-or-name &optional not-this-window)
   "*Funcja tworzaca okno i umieszczajaca tam bufor."
   (let ((bname (buffer-name buffer-or-name))
@@ -46,6 +44,11 @@
 		(set-window-dedicated-p grabarz-wm-console-window 0)) ; tu dodac config
 	win))
 
+; advices (pop-to-buffer) i (switch-to-buffer) musza otwierac bufor w odpowiednim oknie. jezeli okno
+; nie istnieje to trzeba je stworzyc.
+; zrobic cos z bledem ktory pojawia sie np przy competition
+
+; interfejs
 
 (defun grabarz-wm-other-window ()
   "*Przeskakuje do nastepnego okna ktore nie jest konsola"

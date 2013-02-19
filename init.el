@@ -308,12 +308,17 @@
   (global-set-key (kbd "<f2>") 'run-cmd-exe)
   (global-set-key (kbd "<f2>") 'grabarz-run-eshell))
 
-(global-set-key (kbd "<f3>") 'dired-jump)
-(global-set-key (kbd "<f4>") '(lambda ()
-  (interactive)
-  (if (string-equal "*Ibuffer*" (buffer-name (current-buffer)))
-    (kill-buffer "*Ibuffer*")
-    (ibuffer))))
+(global-set-key (kbd "<f3>")
+  '(lambda ()
+	 (interactive)
+	 (if (not (dired-jump))
+		 (dired))))
+(global-set-key (kbd "<f4>")
+  '(lambda ()
+	 (interactive)
+	 (if (string-equal "*Ibuffer*" (buffer-name (current-buffer)))
+		 (kill-buffer "*Ibuffer*")
+	   (ibuffer))))
 (global-set-key (kbd "<f5>") 'compile) ; dodac opcje przerywania kompilacji
 
 ; podmapowanie f-ow pod cmd-n
@@ -356,5 +361,6 @@
 		"*compilation*"
 		"*ansi-term*"
 		"*Backtrace*"
-		"*eshell*"))
+		"*eshell*"
+		"*inferior-lisp*"))
 (grabarz-wm)
