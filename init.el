@@ -11,33 +11,36 @@
 
 ; ustawienia sciezek specjalnie dla ns
 (if (not windowsp)
-	(let ((grabarz-path
-		   '("/bin"
-			 "/sbin"
-			 "/usr/bin"
-			 "/usr/sbin"
-			 "/usr/local/bin"
-			 "/opt/local/bin"
-			 "/opt/local/sbin")))
-	  (setq exec-path (append exec-path grabarz-path))
-	  (setenv "PATH" (mapconcat 'identity grabarz-path ":"))))
+    (let ((grabarz-path
+           '("/bin"
+             "/sbin"
+             "/usr/bin"
+             "/usr/sbin"
+             "/usr/local/bin"
+             "/opt/local/bin"
+             "/opt/local/sbin")))
+      (setq exec-path (append exec-path grabarz-path))
+      (setenv "PATH" (mapconcat 'identity grabarz-path ":"))))
 
 ; ustawienie rozmiarow okienka
 (if windowsp
     (setq initial-frame-alist `((left . 0) (top . 0) (width . 232) (height . 63)))
-    (setq initial-frame-alist `((left . 0) (top . 0) (width . 251) (height . 74))))
+  (setq initial-frame-alist `((left . 0) (top . 0) (width . 251) (height . 74))))
 
 ; ustawienie czcionki
 (if windowsp
     (add-to-list 'default-frame-alist '(font . "Consolas-8"))
-    (add-to-list 'default-frame-alist '(font . "Consolas-10")))
+  (add-to-list 'default-frame-alist '(font . "Consolas-10")))
 
 (global-font-lock-mode t)
 
 ; ustawienie menu i status bara
-(if (not window-system) (menu-bar-mode -1))
-(when (functionp 'tool-bar-mode) (tool-bar-mode -1))
-(when (functionp 'scroll-bar-mode) (scroll-bar-mode -1))
+(if (not window-system)
+    (menu-bar-mode -1))
+(when (functionp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (functionp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
 
 ; ibuffer zamias buffer-menut
 (defalias 'list-buffers 'ibuffer)
@@ -51,10 +54,11 @@
 (defun run-cmd-exe()
   (interactive)
   (let ((proc (start-process "console" nil "console.exe" "/C" "start" "console.exe")))
-	(set-process-query-on-exit-flag proc nil)))
+    (set-process-query-on-exit-flag proc nil)))
 
 ; ansi-term i funkcja odpalająca
 (require 'term) ; do bindowania potrzebne
+
 (defadvice ansi-term (after advise-ansi-term-coding-system)
   (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
 (ad-activate 'ansi-term)
@@ -63,12 +67,12 @@
   (interactive)
   (let ((term-str "*ansi-term*"))
     (if (string-equal term-str (buffer-name (current-buffer)))
-      (previous-buffer)
+        (previous-buffer)
       (if (term-check-proc term-str)
-        (switch-to-buffer term-str)
+          (switch-to-buffer term-str)
         (progn
           (if (get-buffer term-str)
-            (kill-buffer term-str))
+              (kill-buffer term-str))
           (ansi-term "/bin/bash"))))))
 
 ;(require 'eshell)
@@ -76,8 +80,8 @@
 (defun grabarz-run-eshell ()
   (interactive)
   (if (string-equal "*eshell*" (buffer-name (current-buffer)))
-	  (previous-buffer)
-	(eshell)))
+      (previous-buffer)
+    (eshell)))
 
 ; ack
 (require 'ack)
@@ -107,6 +111,16 @@
 ; ustawienia aspell'a
 (setq ispell-program-name "/opt/local/bin/aspell")
 
+; ustawienie lisp i slime mode
+
+(add-hook 'lisp-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)))
+
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)))
+
 ; ustawienia cc-mode
 (setq c-default-style "bsd" c-basic-offset 4)
 (setq-default c-basic-offset 4 tab-width 4 indent-tabs-mode t)
@@ -122,9 +136,10 @@
 (defun grabarz-copy-file-name ()
   "Copy the current buffer file name to the clipboard."
   (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
+  (let ((filename
+         (if (equal major-mode 'dired-mode)
+             default-directory
+           (buffer-file-name))))
     (when filename
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
@@ -302,23 +317,23 @@
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 (if windowsp
-	(global-set-key (kbd "C-`") 'grabarz-wm-console-activate-hide)
+    (global-set-key (kbd "C-`") 'grabarz-wm-console-activate-hide)
   (global-set-key (kbd "C-§") 'grabarz-wm-console-activate-hide))
 (if windowsp
   (global-set-key (kbd "<f2>") 'run-cmd-exe)
   (global-set-key (kbd "<f2>") 'grabarz-run-eshell))
 
 (global-set-key (kbd "<f3>")
-  '(lambda ()
-	 (interactive)
-	 (if (not (dired-jump))
-		 (dired))))
+                '(lambda ()
+                   (interactive)
+                   (if (not (dired-jump))
+                       (dired))))
 (global-set-key (kbd "<f4>")
-  '(lambda ()
-	 (interactive)
-	 (if (string-equal "*Ibuffer*" (buffer-name (current-buffer)))
-		 (kill-buffer "*Ibuffer*")
-	   (ibuffer))))
+                '(lambda ()
+                   (interactive)
+                   (if (string-equal "*Ibuffer*" (buffer-name (current-buffer)))
+                       (kill-buffer "*Ibuffer*")
+                     (ibuffer))))
 (global-set-key (kbd "<f5>") 'compile) ; dodac opcje przerywania kompilacji
 
 ; podmapowanie f-ow pod cmd-n
@@ -354,13 +369,13 @@
 (require 'grabarz-wm)
 
 (setq grabarz-wm-console-regexp
-	  '("*Completions*"
-		"*Ido Completions*"
-		"*Help*"
-		"*grep*"
-		"*compilation*"
-		"*ansi-term*"
-		"*Backtrace*"
-		"*eshell*"
-		"*inferior-lisp*"))
+      '("*Completions*"
+        "*Ido Completions*"
+        "*Help*"
+        "*grep*"
+        "*compilation*"
+        "*ansi-term*"
+        "*Backtrace*"
+        "*eshell*"
+        "*inferior-lisp*"))
 (grabarz-wm)
