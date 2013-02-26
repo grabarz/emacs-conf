@@ -32,7 +32,11 @@
     (add-to-list 'default-frame-alist '(font . "Consolas-8"))
   (add-to-list 'default-frame-alist '(font . "Consolas-10")))
 
+; fonty - zeby sie nie mulilo
 (global-font-lock-mode t)
+(setq jit-lock-defer-time 0.06)
+(setq font-lock-maximum-decoration
+      '((c-mode . 1) (c++-mode . 1)))
 
 ; ustawienie menu i status bara
 (if (not window-system)
