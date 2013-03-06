@@ -50,12 +50,12 @@
 
 ; interfejs
 
-(defun grabarz-wm-other-window ()
+(defun grabarz-wm-other-window (num)
   "*Przeskakuje do nastepnego okna ktore nie jest konsola"
   (interactive)
-  (other-window 1)
+  (other-window num)
   (if (equal (selected-window) grabarz-wm-console-window)
-	  (other-window 1)))
+	  (other-window num)))
 
 (defun grabarz-wm-console-activate-hide ()
    "*Pokazuje konsole z pierwszym pasujacym buforem."

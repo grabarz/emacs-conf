@@ -35,8 +35,8 @@
 ; fonty - zeby sie nie mulilo
 (global-font-lock-mode t)
 (setq jit-lock-defer-time 0.06)
-(setq font-lock-maximum-decoration
-      '((c-mode . 1) (c++-mode . 1)))
+;(setq font-lock-maximum-decoration
+;     '((c-mode . 1) (c++-mode . 1)))
 
 ; ustawienie menu i status bara
 (if (not window-system)
@@ -159,6 +159,11 @@
   (set-keyboard-coding-system 'cp1250)
   (set-selection-coding-system 'cp1250)
   (prefer-coding-system 'cp1250))
+
+(when (not windowsp)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8))
 
 ; ustawienia ls-lisp zamiast systemowego ls
 (require 'ls-lisp)
@@ -317,12 +322,13 @@
 (global-set-key (kbd "C-\"") 'enlarge-window)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "M-p") 'backward-paragraph)
-(global-set-key (kbd "C-<tab>") 'grabarz-wm-other-window)
+(global-set-key (kbd "M-1") '(lambda () (interactive) (grabarz-wm-other-window -1)))
+(global-set-key (kbd "M-2") '(lambda () (interactive) (grabarz-wm-other-window 1)))
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 (if windowsp
-    (global-set-key (kbd "C-`") 'grabarz-wm-console-activate-hide)
-  (global-set-key (kbd "C-§") 'grabarz-wm-console-activate-hide))
+    (global-set-key (kbd "M-`") 'grabarz-wm-console-activate-hide)
+  (global-set-key (kbd "M-§") 'grabarz-wm-console-activate-hide))
 (if windowsp
   (global-set-key (kbd "<f2>") 'run-cmd-exe)
   (global-set-key (kbd "<f2>") 'grabarz-run-eshell))
@@ -331,7 +337,7 @@
                 '(lambda ()
                    (interactive)
                    (if (not (dired-jump))
-                       (dired))))
+                       (dired default-directory))))
 (global-set-key (kbd "<f4>")
                 '(lambda ()
                    (interactive)
@@ -341,8 +347,11 @@
 (global-set-key (kbd "<f5>") 'compile) ; dodac opcje przerywania kompilacji
 
 ; podmapowanie f-ow pod cmd-n
-;(when (and (eq system-type 'darwin) (eq window-system 'ns))
-;  (global-set-key (kbd "s-2") (key-binding (kbd "<f2>")))
+(when (and (eq system-type 'darwin) (eq window-system 'ns))
+  (global-set-key (kbd "s-§") (key-binding (kbd "M-§")))
+  (global-set-key (kbd "s-1") (key-binding (kbd "M-1")))
+  (global-set-key (kbd "s-2") (key-binding (kbd "M-2"))))
+
 ;  (global-set-key (kbd "s-3") (key-binding (kbd "<f3>")))
 ;  (global-set-key (kbd "s-4") (key-binding (kbd "<f4>"))))
 
