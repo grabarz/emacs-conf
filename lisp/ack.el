@@ -75,9 +75,9 @@ in the --type argument to the ack command")
 ;;;###autoload
 (defvar ack-history nil)
 (defvar ack-host-defaults-alist nil)
-(defun ack ()
+(defun ack (arg)
   "Like grep, but using ack-command as the default"
-  (interactive)
+  (interactive (list (read-directory-name "Search in directory:")))
   ; Make sure grep has been initialized
   (if (>= emacs-major-version 22)
       (require 'grep)
@@ -86,7 +86,8 @@ in the --type argument to the ack command")
   (let ((null-device (format "< %s" null-device))
         (grep-command ack-command)
         (grep-history ack-history)
-        (grep-host-defaults-alist ack-host-defaults-alist))
+        (grep-host-defaults-alist ack-host-defaults-alist)
+        (default-directory arg))
     (call-interactively 'grep)
     (setq ack-history             grep-history
           ack-host-defaults-alist grep-host-defaults-alist)))
