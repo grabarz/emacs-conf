@@ -133,8 +133,11 @@
 
 ; dodanie przelaczania sie pomiedzy naglowkiem/implementacja
 (add-hook 'c-mode-common-hook
-  (lambda() 
-    (local-set-key (kbd "C-c o") 'ff-find-other-file)))
+          (lambda() 
+            (local-set-key (kbd "C-c o") 'ff-find-other-file)))
+
+(add-hook 'c-mode-common-hook
+             (lambda () (setq c-syntactic-indentation nil)))
 
 ; funkcja kopiujaca nazwe edytowanego pliku
 (defun grabarz-copy-file-name ()
@@ -244,6 +247,58 @@
 (add-hook 'dired-mode-hook 'setup-compilation)
 (add-hook 'c-mode-common-hook 'setup-compilation)
 
+; auto-complete
+
+(add-to-list 'load-path "~/.emacs.d/auto-complete")
+;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(require 'auto-complete-config)
+(ac-config-default)
+
+; clang
+
+(add-to-list 'load-path "~/.emacs.d/auto-complete-clang")
+(require 'auto-complete-clang)
+
+;; (defun ac-cc-mode-setup ()
+;;   (setq ac-clang-complete-executable "~/.emacs.d/auto-complete-clang/clang-complete")
+;;   (setq ac-sources '(ac-source-clang-async))
+;;   (ac-clang-launch-completion-process)
+;; )
+
+;; (defun my-ac-config ()
+;;   (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
+;;   (add-hook 'auto-complete-mode-hook 'ac-common-setup)
+;;   (global-auto-complete-mode t))
+
+;; (my-ac-config)
+
+ (defcustom mycustom-system-include-paths '("/usr/clang-ide/lib/c++/v1/" "./" "./include/" "/opt/local/include" "/usr/include" )
+   "This is a list of include paths that are used by the clang auto completion."
+   :group 'mycustom
+   :type '(repeat directory)
+   )
+
+;; (add-to-list 'load-path "~/.emacs.d/auto-complete")
+;; (require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+;; (ac-config-default)
+
+;; (require 'auto-complete-clang)
+(setq clang-completion-suppress-error 't)
+ (setq ac-clang-flags
+       (mapcar (lambda (item)(concat "-I" item))
+               (append
+                mycustom-system-include-paths
+                )
+               )
+       )
+
+ (defun my-ac-clang-mode-common-hook()
+   (define-key c-mode-base-map (kbd "M-/") 'ac-complete-clang)
+  )
+
+ (add-hook 'c-mode-common-hook 'my-ac-clang-mode-common-hook)
+
 ; ediff
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
@@ -279,13 +334,13 @@
         (:connection-type . ssl))))
 
 ; yasnippet
-;(add-to-list 'load-path "~/.emacs.d/yasnippet")
-;(require 'yasnippet)
-;;(setq yas/snippet-dirs '("~/.emacs.d/snippets"))
-;(yas/reload-all)
-;(add-hook 'c-mode-common-hook
-;   '(lambda ()
-;      (yas/minor-mode)))
+(add-to-list 'load-path "~/.emacs.d/yasnippet")
+(require 'yasnippet)
+;(setq yas/snippet-dirs '("~/.emacs.d/snippets"))
+(yas/reload-all)
+(add-hook 'c-mode-common-hook
+   '(lambda ()
+      (yas/minor-mode)))
 
 ; vc - zostawienie tylko gita i hg
 (setq vc-cvs-stay-local nil)
@@ -350,7 +405,12 @@
 (when (and (eq system-type 'darwin) (eq window-system 'ns))
   (global-set-key (kbd "s-§") (key-binding (kbd "M-§")))
   (global-set-key (kbd "s-1") (key-binding (kbd "M-1")))
-  (global-set-key (kbd "s-2") (key-binding (kbd "M-2"))))
+  (global-set-key (kbd "s-2") (key-binding (kbd "M-2")))
+  (setq mac-option-key-is-meta nil)
+  (setq mac-command-key-is-meta t)
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'alt))
+
 
 ;  (global-set-key (kbd "s-3") (key-binding (kbd "<f3>")))
 ;  (global-set-key (kbd "s-4") (key-binding (kbd "<f4>"))))
