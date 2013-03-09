@@ -256,48 +256,23 @@
 
 ; clang
 
-(add-to-list 'load-path "~/.emacs.d/auto-complete-clang")
 (require 'auto-complete-clang)
 
-;; (defun ac-cc-mode-setup ()
-;;   (setq ac-clang-complete-executable "~/.emacs.d/auto-complete-clang/clang-complete")
-;;   (setq ac-sources '(ac-source-clang-async))
-;;   (ac-clang-launch-completion-process)
-;; )
+(defcustom grabarz-include-paths '("/usr/clang-ide/lib/c++/v1/" "./" "./include/" "/opt/local/include" "/usr/include")
+  "*Customowe includy."
+  :group 'grabarz-clang
+  :type '(repeat directory))
 
-;; (defun my-ac-config ()
-;;   (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
-;;   (add-hook 'auto-complete-mode-hook 'ac-common-setup)
-;;   (global-auto-complete-mode t))
-
-;; (my-ac-config)
-
- (defcustom mycustom-system-include-paths '("/usr/clang-ide/lib/c++/v1/" "./" "./include/" "/opt/local/include" "/usr/include" )
-   "This is a list of include paths that are used by the clang auto completion."
-   :group 'mycustom
-   :type '(repeat directory)
-   )
-
-;; (add-to-list 'load-path "~/.emacs.d/auto-complete")
-;; (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-;; (ac-config-default)
 
-;; (require 'auto-complete-clang)
 (setq clang-completion-suppress-error 't)
- (setq ac-clang-flags
-       (mapcar (lambda (item)(concat "-I" item))
-               (append
-                mycustom-system-include-paths
-                )
-               )
-       )
+(setq ac-clang-flags
+      (mapcar (lambda (item)(concat "-I" item))
+              (append grabarz-include-paths)))
 
- (defun my-ac-clang-mode-common-hook()
-   (define-key c-mode-base-map (kbd "M-/") 'ac-complete-clang)
-  )
-
- (add-hook 'c-mode-common-hook 'my-ac-clang-mode-common-hook)
+(defun grabarz-clang-mode-common-hook()
+  (define-key c-mode-base-map (kbd "M-/") 'ac-complete-clang))
+(add-hook 'c-mode-common-hook 'grabarz-clang-mode-common-hook)
 
 ; ediff
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -314,11 +289,6 @@
     (local-set-key (kbd "C-c s") 'gtags-find-symbol)
     (local-set-key (kbd "C-c f") 'gtags-find-file)))
 (add-hook 'gtags-select-mode-hook 'hl-line-mode)
-
-; globalff - locate interface
-;; (require 'globalff)
-;; (global-set-key (kbd "C-c l") 'globalff)
-;; (setq globalff-search-delay 0.75)
 
 ; find-file-in-repository
 ;(require 'find-file-in-repository)
