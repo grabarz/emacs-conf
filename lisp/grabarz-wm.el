@@ -55,8 +55,9 @@
     (if (grabarz-wm-check-regexp grabarz-wm-console-regexp bname)
         (progn
           (when (not (window-live-p grabarz-wm-console-window))
-              (grabarz-wm-console-window-make)))
-;          (select-window grabarz-wm-console-window))
+            (grabarz-wm-console-window-make))
+          (when (not (active-minibuffer-window))
+            (select-window grabarz-wm-console-window)))
       (when (equal grabarz-wm-console-window (selected-window))
           (other-window -1)))
     ad-do-it))
