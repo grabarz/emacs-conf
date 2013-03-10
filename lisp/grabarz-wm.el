@@ -1,3 +1,10 @@
+;;
+;; grabarz-wm - prosty manager okienek dodajacy konsolke gdzie wyswietlane sa wybrane bufory.
+;;
+;; TODO:
+;; - poprawic przeskok do nastepnego buforu.
+;;
+
 (require 'cl)
 
 (defcustom grabarz-wm-console-window nil
@@ -44,8 +51,8 @@
 				(setq win (previous-window win))))
 		(setq win (selected-window))))
 	(set-window-buffer win buffer-or-name)
-	(when (equal grabarz-wm-console-window win)
-		(set-window-dedicated-p grabarz-wm-console-window 0))
+;	(when (equal grabarz-wm-console-window win)
+;		(set-window-dedicated-p grabarz-wm-console-window 0))
 	win))
 
 (defadvice set-window-buffer (around
