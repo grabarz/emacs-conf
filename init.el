@@ -253,12 +253,13 @@
 ;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (require 'auto-complete-config)
 (ac-config-default)
+(define-key ac-completing-map "\e" 'ac-stop)
 
 ; clang
 
 (require 'auto-complete-clang)
 
-(defcustom grabarz-include-paths '("/usr/clang-ide/lib/c++/v1/" "./" "./include/" "/opt/local/include" "/usr/include")
+(defcustom grabarz-include-paths '("/usr/clang-ide/lib/c++/v1/" "./" "./include/" "/opt/local/include" "/usr/include" "../../" "../../../")
   "*Customowe includy."
   :group 'grabarz-clang
   :type '(repeat directory))
