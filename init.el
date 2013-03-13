@@ -128,7 +128,7 @@
   (c-set-offset 'case-label '+)
   (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
   (when windowsp
-    (c-set-offset innamespace '-)))
+    (c-set-offset 'innamespace '-)))
 
 (setq c-default-style "bsd" c-basic-offset 4 )
 (setq-default c-basic-offset 4 tab-width 4 indent-tabs-mode t c-argdecl-indent 0)

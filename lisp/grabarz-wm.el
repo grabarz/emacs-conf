@@ -33,7 +33,6 @@
   (let* ((th (float (window-total-height (frame-root-window))))
 		 (wh (round (* (/ (- 100 (float grabarz-wm-console-window-height)) 100) th))))
 	(setq grabarz-wm-console-window (split-window (frame-root-window) wh nil))))
-;    (set-window-parameter grabarz-wm-console-window 'ignore-window-parameters 'delete-window)))
 
 (defun grabarz-wm-display-buffer-function (buffer-or-name &optional not-this-window)
   "Funcja tworzaca okno i umieszczajaca tam bufor."
@@ -51,8 +50,6 @@
 				(setq win (previous-window win))))
 		(setq win (selected-window))))
 	(set-window-buffer win buffer-or-name)
-;	(when (equal grabarz-wm-console-window win)
-;		(set-window-dedicated-p grabarz-wm-console-window 0))
 	win))
 
 (defadvice set-window-buffer (around
@@ -63,12 +60,9 @@
         (progn
           (when (not (window-live-p grabarz-wm-console-window))
             (grabarz-wm-console-window-make))
-          (when (not (active-minibuffer-window))
-            (select-window grabarz-wm-console-window)
-            (setq win grabarz-wm-console-window)))
+          (setq win grabarz-wm-console-window))
       (when (equal grabarz-wm-console-window (selected-window))
-        (other-window -1)
-        (setq win (selected-window))))
+        (setq win (previous-window (selected-window)))))
     ad-do-it))
 
 ; interfejs
@@ -99,6 +93,7 @@
 (defun grabarz-wm-quit ()
   "*Stops grabarz-wm."
   (interactive)
+  (setq display-buffer-function nil)
   (ad-deactivate 'set-window-buffer)
   (ad-deactivate 'current-window-configuration)
   (ad-deactivate 'set-window-configuration))
