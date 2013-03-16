@@ -62,7 +62,7 @@
             (grabarz-wm-console-window-make))
           (setq win grabarz-wm-console-window))
       (when (equal grabarz-wm-console-window (selected-window))
-        (setq win (previous-window (selected-window)))))
+        (setq win (next-window (selected-window) 0))))
     ad-do-it))
 
 ; interfejs

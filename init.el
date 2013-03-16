@@ -50,6 +50,7 @@
 ;; themesy
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'zenburn t)
+;(load-theme 'inkpot t)
 
 ;; funkcja odpalajaca zamiennik cmd.exe w windowsie
 (defun run-cmd-exe()
@@ -257,17 +258,24 @@
 (add-to-list 'load-path "~/.emacs.d/auto-complete")
 (require 'auto-complete-config)
 (ac-config-default)
+(setq ac-auto-start nil)
 (define-key ac-completing-map "\e" 'ac-stop)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 
 ;; clang
 (require 'auto-complete-clang)
 
-(defcustom grabarz-include-paths '("/usr/clang-ide/lib/c++/v1/" "./" "./include/" "/opt/local/include" "/usr/include" "../../" "../../../")
+(defcustom grabarz-include-paths
+  '("/usr/clang-ide/lib/c++/v1/"
+    "./"
+    "./include/"
+    "/opt/local/include"
+    "/usr/include"
+    "../../"
+    "../../../")
   "*Customowe includy."
   :group 'grabarz-clang
   :type '(repeat directory))
-
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 
 (setq clang-completion-suppress-error 't)
 (setq ac-clang-flags
@@ -327,9 +335,47 @@
 (require 'slime)
 (slime-setup)
 
+;; generowanie guidow
+(defun grabarz-random-guid ()
+  "Insert a UUID. This uses a simple hashing of variable data."
+  (interactive)
+  (let ((myStr (md5 (format "%s%s%s%s%s%s%s%s%s%s"
+                            (user-uid)
+                            (emacs-pid)
+                            (system-name)
+                            (user-full-name)
+                            (current-time)
+                            (emacs-uptime)
+                            (garbage-collect)
+                            (buffer-string)
+                            (random)
+                            (recent-keys)))))
+    
+    (insert (format "%s-%s-4%s-a%s-%s"
+                    (substring myStr 0 8)
+                    (substring myStr 8 12)
+                    (substring myStr 13 16)
+                    (substring myStr 17 20)
+                    (substring myStr 20 32)))))
+
+;; grabarz-wm
+(require 'grabarz-wm)
+(setq grabarz-wm-console-regexp
+      '("*Completions*"
+        "*Ido Completions*"
+        "*Help*"
+        "*grep*"
+        "*compilation*"
+        "*ansi-term*"
+        "*Backtrace*"
+        "*eshell*"
+        "*inferior-lisp*"))
+(grabarz-wm)
+
 ;; przebindowanie klawiszy
 (windmove-default-keybindings) ; poruszanie sie po oknach
 (global-set-key (kbd "C-c g") 'goto-line)
+(global-set-key (kbd "C-c C-g") 'grabarz-random-guid)
 (global-set-key (kbd "C-c a") 'ack)
 (global-set-key (kbd "C-c d") 'find-name-dired)
 (global-set-key (kbd "C-c m") 'magit-status)
@@ -387,18 +433,15 @@
 ;; (setq user-mail-address "grabarz@gmail.com"
 ;;   user-full-name "Piotr Grabowski"
 ;;   message-cite-function 'message-cite-original-without-signature)
-
-;; grabarz-wm
-(require 'grabarz-wm)
-
-(setq grabarz-wm-console-regexp
-      '("*Completions*"
-        "*Ido Completions*"
-        "*Help*"
-        "*grep*"
-        "*compilation*"
-        "*ansi-term*"
-        "*Backtrace*"
-        "*eshell*"
-        "*inferior-lisp*"))
-(grabarz-wm)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes (quote ("967c58175840fcea30b56f2a5a326b232d4939393bed59339d21e46cf4798ecf" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
