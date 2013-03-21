@@ -45,9 +45,9 @@
           (setq win grabarz-wm-console-window))
       (if not-this-window
           (progn
-            (setq win (previous-window))
+            (setq win (next-window))
             (when (equal grabarz-wm-console-window win)
-              (setq win (next-window win))))
+              (setq win (next-window win 0))))
         (setq win (selected-window))))
     (set-window-buffer win buffer-or-name)
     win))
@@ -63,7 +63,7 @@
           (setq win grabarz-wm-console-window))
       (when (equal grabarz-wm-console-window (selected-window))
         (setq win (next-window (selected-window) 0))))
-    (when (and (not (minibufferp)) (window-live-p win))
+    (when (and (not (window-minibuffer-p)) (window-live-p win))
       (select-window win))
     ad-do-it))
 
