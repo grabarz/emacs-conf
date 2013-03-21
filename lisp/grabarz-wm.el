@@ -31,26 +31,26 @@
 (defun grabarz-wm-console-window-make ()
   "Tworzy okno konsoli w zmiennej globalnej."
   (let* ((th (float (window-total-height (frame-root-window))))
-		 (wh (round (* (/ (- 100 (float grabarz-wm-console-window-height)) 100) th))))
-	(setq grabarz-wm-console-window (split-window (frame-root-window) wh nil))))
+         (wh (round (* (/ (- 100 (float grabarz-wm-console-window-height)) 100) th))))
+    (setq grabarz-wm-console-window (split-window (frame-root-window) wh nil))))
 
 (defun grabarz-wm-display-buffer-function (buffer-or-name &optional not-this-window)
   "Funcja tworzaca okno i umieszczajaca tam bufor."
   (let ((bname (buffer-name buffer-or-name))
-		win)
-	(if (grabarz-wm-check-regexp grabarz-wm-console-regexp bname)
-		(progn
-		  (when (not (window-live-p grabarz-wm-console-window))
-			  (grabarz-wm-console-window-make))
-		  (setq win grabarz-wm-console-window))
-	  (if not-this-window
-		  (progn
-			(setq win (previous-window))
-			(when (equal grabarz-wm-console-window win)
-				(setq win (previous-window win))))
-		(setq win (selected-window))))
-	(set-window-buffer win buffer-or-name)
-	win))
+        win)
+    (if (grabarz-wm-check-regexp grabarz-wm-console-regexp bname)
+        (progn
+          (when (not (window-live-p grabarz-wm-console-window))
+            (grabarz-wm-console-window-make))
+          (setq win grabarz-wm-console-window))
+      (if not-this-window
+          (progn
+            (setq win (previous-window))
+            (when (equal grabarz-wm-console-window win)
+              (setq win (next-window win))))
+        (setq win (selected-window))))
+    (set-window-buffer win buffer-or-name)
+    win))
 
 (defadvice set-window-buffer (around
                               grabarz-wm-ad
@@ -63,6 +63,8 @@
           (setq win grabarz-wm-console-window))
       (when (equal grabarz-wm-console-window (selected-window))
         (setq win (next-window (selected-window) 0))))
+    (when (and (not (minibufferp)) (window-live-p win))
+      (select-window win))
     ad-do-it))
 
 ; interfejs
