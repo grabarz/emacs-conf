@@ -372,6 +372,42 @@
         "*inferior-lisp*"))
 (grabarz-wm)
 
+;; funkcje operujace na tekscie
+(defun grabarz-move-text-internal (arg)
+  (cond
+   ((and mark-active transient-mark-mode)
+    (if (> (point) (mark))
+        (exchange-point-and-mark))
+    (let ((column (current-column))
+          (text (delete-and-extract-region (point) (mark))))
+      (forward-line arg)
+      (move-to-column column t)
+      (set-mark (point))
+      (insert text)
+      (exchange-point-and-mark)
+      (setq deactivate-mark nil)))
+   (t
+    (let ((column (current-column)))
+      (beginning-of-line)
+      (when (or (> arg 0) (not (bobp)))
+        (forward-line )
+        (when (or (< arg 0) (not (eobp)))
+          (transpose-lines arg))
+        (forward-line -1))
+      (move-to-column column t)))))
+
+(defun grabarz-move-text-down (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines down."
+  (interactive "*p")
+  (grabarz-move-text-internal arg))
+
+(defun grabarz-move-text-up (arg)
+  "Move region (transient-mark-mode active) or current line
+  arg lines up."
+  (interactive "*p")
+  (grabarz-move-text-internal (- arg)))
+
 ;; przebindowanie klawiszy
 (windmove-default-keybindings) ; poruszanie sie po oknach
 (global-set-key (kbd "C-c g") 'goto-line)
@@ -387,6 +423,8 @@
 (global-set-key (kbd "C-'") 'enlarge-window-horizontally)
 (global-set-key (kbd "C-:") 'shrink-window)
 (global-set-key (kbd "C-\"") 'enlarge-window)
+(global-set-key (kbd "C-M-9") 'grabarz-move-text-up)
+(global-set-key (kbd "C-M-0") 'grabarz-move-text-down)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "M-p") 'backward-paragraph)
 (global-set-key (kbd "M-1") '(lambda () (interactive) (grabarz-wm-other-window -1)))
