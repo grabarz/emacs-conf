@@ -336,9 +336,9 @@
 (slime-setup)
 
 ;; generowanie guidow
-(defun grabarz-random-guid ()
+(defun grabarz-random-guid (arg)
   "Insert a UUID. This uses a simple hashing of variable data."
-  (interactive)
+  (interactive "P")
   (let ((myStr (md5 (format "%s%s%s%s%s%s%s%s%s%s"
                             (user-uid)
                             (emacs-pid)
@@ -350,8 +350,8 @@
                             (buffer-string)
                             (random)
                             (recent-keys)))))
-    
-    (insert (format "%s-%s-4%s-a%s-%s"
+    (when arg (setq myStr (upcase myStr)))
+    (insert (format (if arg "%s-%s-4%s-A%s-%s" "%s-%s-4%s-a%s-%s")
                     (substring myStr 0 8)
                     (substring myStr 8 12)
                     (substring myStr 13 16)
