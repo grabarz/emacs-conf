@@ -63,8 +63,6 @@
           (setq win grabarz-wm-console-window))
       (when (equal grabarz-wm-console-window (selected-window))
         (setq win (next-window (selected-window) 0))))
-    (when (and (not (window-minibuffer-p)) (window-live-p win))
-      (select-window win))
     ad-do-it))
 
 ; interfejs

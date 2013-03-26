@@ -267,10 +267,11 @@
 
 (defcustom grabarz-include-paths
   '("/usr/clang-ide/lib/c++/v1/"
-    "./"
     "./include/"
     "/opt/local/include"
     "/usr/include"
+    "./"
+    "../"
     "../../"
     "../../../")
   "*Customowe includy."
