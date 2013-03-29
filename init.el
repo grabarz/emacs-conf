@@ -287,6 +287,19 @@
   (define-key c-mode-base-map (kbd "M-/") 'ac-complete-clang))
 (add-hook 'c-mode-common-hook 'grabarz-clang-mode-common-hook)
 
+;; eclim
+(when windowsp
+  (add-to-list 'load-path "~/.emacs.d/emacs-eclim/")
+  (require 'eclim)
+  (global-eclim-mode)
+  (setq eclim-executable "c:\\eclipse\\eclipse\\eclim.bat")
+  (setq help-at-pt-display-when-idle t)
+  (setq help-at-pt-timer-delay 0.1)
+  (help-at-pt-set-timer)
+  (require 'ac-emacs-eclim-source)
+  (ac-emacs-eclim-config)
+  (add-to-list 'eclim--file-coding-system-mapping '("windows-1250-dos" . "windows-1250")))
+
 ;; global
 (autoload 'gtags-mode "gtags" "" t)
 (setq gtags-ignore-case nil)
