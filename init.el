@@ -100,7 +100,7 @@
 
 ;; domyslny katalog
 (if windowsp
-  (setq default-directory "c:\projekty")
+  (setq default-directory "d:\\projekty")
   (setq default-directory "~/"))
 
 ;; natychmiastowe pokazywanie domkniec
@@ -113,6 +113,47 @@
 ;; ustawienia aspell'a
 (setq ispell-program-name "/opt/local/bin/aspell")
 
+;; auto-complete
+(add-to-list 'load-path "~/.emacs.d/auto-complete")
+(require 'auto-complete-config)
+(ac-config-default)
+(setq ac-auto-start nil)
+(define-key ac-completing-map "\e" 'ac-stop)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+
+;; slime
+(add-to-list 'load-path "~/.emacs.d/slime/")
+(add-to-list 'load-path "~/.emacs.d/slime/contrib/")
+(eval-after-load "slime"
+  '(progn
+     (setq slime-lisp-implementations
+           '((sbcl ("/opt/local/bin/sbcl")
+                   :coding-system utf-8-unix
+                   :env ("SBCL_HOME=/opt/local/lib/sbcl"))
+             (clisp ("/usr/bin/clisp"))))
+     (slime-setup '(
+                    slime-asdf
+                    slime-autodoc
+                    slime-editing-commands
+                    slime-fancy-inspector
+                    slime-fontifying-fu
+                    slime-fuzzy
+                    slime-indentation
+                    slime-package-fu
+                    slime-references
+                    slime-repl
+                    slime-sbcl-exts
+                    slime-scratch
+                    slime-xref-browser
+                    ))
+     (slime-autodoc-mode)
+     (setq slime-complete-symbol*-fancy t)
+     (setq slime-complete-symbol-function
+	   'slime-fuzzy-complete-symbol)))
+(require 'slime)
+(define-key slime-mode-map (kbd "C-c t") 'slime-edit-definition)
+(define-key slime-mode-map (kbd "M-.") 'auto-complete)
+
 ;; ustawienie lisp i slime mode
 (add-hook 'lisp-mode-hook
           (lambda ()
@@ -121,6 +162,18 @@
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
             (setq indent-tabs-mode nil)))
+
+(add-hook 'scheme-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (slime-mode t)))
+
+;; ac-slime
+(require 'ac-slime)
+(add-hook 'slime-mode-hook 'set-up-slime-ac)
+ (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+ (eval-after-load "auto-complete"
+   '(add-to-list 'ac-modes 'slime-repl-mode))
 
 ;; ustawienia cc-mode
 (defun grabarz-c-indent-setup ()
@@ -254,14 +307,6 @@
 (add-hook 'dired-mode-hook 'setup-compilation)
 (add-hook 'c-mode-common-hook 'setup-compilation)
 
-;; auto-complete
-(add-to-list 'load-path "~/.emacs.d/auto-complete")
-(require 'auto-complete-config)
-(ac-config-default)
-(setq ac-auto-start nil)
-(define-key ac-completing-map "\e" 'ac-stop)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-
 ;; clang
 (require 'auto-complete-clang)
 
@@ -343,12 +388,6 @@
 (require 'magit)
 (require 'magit-blame)
 
-;; slime
-(add-to-list 'load-path "~/.emacs.d/slime/")
-(setq inferior-lisp-program "/opt/local/bin/sbcl")
-(require 'slime)
-(slime-setup)
-
 ;; generowanie guidow
 (defun grabarz-random-guid (arg)
   "Insert a UUID. This uses a simple hashing of variable data."
@@ -383,7 +422,10 @@
         "*ansi-term*"
         "*Backtrace*"
         "*eshell*"
-        "*inferior-lisp*"))
+        "*inferior-lisp*"
+        "*slime-description*"
+        "*slime-repl sbcl*"
+        "*Fuzzy Completions*"))
 (grabarz-wm)
 
 ;; funkcje operujace na tekscie
@@ -445,7 +487,7 @@
 (global-set-key (kbd "M-2") '(lambda () (interactive) (grabarz-wm-other-window 1)))
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
-(global-set-key (kbd "M-.") 'auto-complete)
+(global-set-key (kbd "M-.") '(lambda () (interactive) (auto-complete)))
 (if windowsp
     (global-set-key (kbd "M-`") 'grabarz-wm-console-activate-hide)
   (global-set-key (kbd "M-§") 'grabarz-wm-console-activate-hide))

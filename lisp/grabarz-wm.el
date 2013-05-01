@@ -13,6 +13,9 @@
 (defvar grabarz-wm-console-window-tmp nil
   "Tymczasowa zmienna.")
 
+(defvar grabarz-wm-old-set-window-buffer nil
+  "Stara wersja funkcji.")
+
 (defcustom grabarz-wm-console-window-height 33
   "*Wysokosc konsoli w %.")
 
@@ -49,7 +52,9 @@
             (when (equal grabarz-wm-console-window win)
               (setq win (next-window win 0))))
         (setq win (selected-window))))
+;    (ad-disable-advice 
     (set-window-buffer win buffer-or-name)
+;    (ad-enable-advice)
     win))
 
 (defadvice set-window-buffer (around
@@ -84,9 +89,10 @@
 
 (defun grabarz-wm ()
   "*Runs grabarz-wm - window manager for emacs."
-  (interactive)
+  (interactive)                                                     
+  (setq grabarz-wm-old-set-window-buffer 'set-window-buffer)
   (setq display-buffer-function 'grabarz-wm-display-buffer-function)
-  (ad-activate 'set-window-buffer t)
+  (ad-activate 'set-window-buffer t)                                
   (add-hook 'minibuffer-setup-hook '(lambda () (setq grabarz-wm-console-window-tmp grabarz-wm-console-window)))
   (add-hook 'minibuffer-exit-hook '(lambda () (setq grabarz-wm-console-window grabarz-wm-console-window-tmp))))
 
