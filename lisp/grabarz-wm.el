@@ -52,9 +52,9 @@
             (when (equal grabarz-wm-console-window win)
               (setq win (next-window win 0))))
         (setq win (selected-window))))
-;    (ad-disable-advice 
+    (ad-disable-advice 'set-window-buffer 'around 'grabarz-wm-ad)
     (set-window-buffer win buffer-or-name)
-;    (ad-enable-advice)
+    (ad-enable-advice 'set-window-buffer 'around 'grabarz-wm-ad)
     win))
 
 (defadvice set-window-buffer (around

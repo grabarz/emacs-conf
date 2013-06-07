@@ -24,12 +24,12 @@
 ;; ustawienie rozmiarow okienka
 (if windowsp
     (setq initial-frame-alist `((left . 0) (top . 0) (width . 232) (height . 63)))
-  (setq initial-frame-alist `((left . 0) (top . 0) (width . 251) (height . 74))))
+  (setq initial-frame-alist `((left . 0) (top . 0) (width . 210) (height . 57))))
 
 ;; ustawienie czcionki
 (if windowsp
     (add-to-list 'default-frame-alist '(font . "Consolas-8"))
-  (add-to-list 'default-frame-alist '(font . "Consolas-10")))
+  (add-to-list 'default-frame-alist '(font . "Monaco-10")))
 
 ;; fonty - zeby sie nie mulilo
 (global-font-lock-mode t)
@@ -154,7 +154,14 @@
 (define-key slime-mode-map (kbd "C-c t") 'slime-edit-definition)
 (define-key slime-mode-map (kbd "M-.") 'auto-complete)
 
-;; ustawienie lisp i slime mode
+;; scheme mode, quack (scheme)
+(require 'quack)
+
+(setq scheme-program-name "csi -:c")
+
+(autoload 'run-scheme "csi -:c" "Run an inferior Scheme process." t)
+
+;; ustawienie lisp i scheme mode
 (add-hook 'lisp-mode-hook
           (lambda ()
             (setq indent-tabs-mode nil)))
@@ -165,8 +172,7 @@
 
 (add-hook 'scheme-mode-hook
           (lambda ()
-            (setq indent-tabs-mode nil)
-            (slime-mode t)))
+            (setq indent-tabs-mode nil)))
 
 ;; ac-slime
 (require 'ac-slime)
@@ -422,6 +428,7 @@
         "*ansi-term*"
         "*Backtrace*"
         "*eshell*"
+        "*scheme*"
         "*inferior-lisp*"
         "*slime-description*"
         "*slime-repl sbcl*"
@@ -528,3 +535,15 @@
 ;; (setq user-mail-address "grabarz@gmail.com"
 ;;   user-full-name "Piotr Grabowski"
 ;;   message-cite-function 'message-cite-original-without-signature)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(quack-programs (quote ("csi -:c" "bigloo" "csi" "csi -hygienic" "gosh" "gracket" "gsi" "gsi ~~/syntax-case.scm -" "guile" "kawa" "mit-scheme" "racket" "racket -il typed/racket" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
