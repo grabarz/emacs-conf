@@ -25,6 +25,9 @@
 (condition-case nil
     (require 'password)
   (error nil))
+(condition-case nil
+    (require 'auth-source)
+  (error nil))
 
 (defvar jabber-jid-history nil
   "History of entered JIDs")
@@ -187,6 +190,7 @@ Return nil if none found."
 
 (defun jabber-jid-bookmarkname (string)
   "Return the conference name from boomarks or displayname from roster, or JID if none set"
+  (require 'jabber-bookmarks)
   (or (loop for conference in (first (loop for value being the hash-values of jabber-bookmarks
                                            collect value))
             do (let ((ls (cadr conference)))
@@ -303,12 +307,26 @@ If FULLJIDS is non-nil, complete jids with resources."
 
 (defun jabber-read-password (bare-jid)
   "Read Jabber password from minibuffer."
-  (let ((prompt (format "Jabber password for %s: " bare-jid)))
-    (if (require 'password-cache nil t)
-	;; Need to copy the password, as sasl.el wants to erase it.
-	(copy-sequence
-	 (password-read prompt (jabber-password-key bare-jid)))
-      (read-passwd prompt))))
+  (let ((found
+	 (and (fboundp 'auth-source-search)
+	      (nth 0 (auth-source-search
+		      :user (jabber-jid-username bare-jid)
+		      :host (jabber-jid-server bare-jid)
+		      :port "xmpp"
+		      :max 1
+		      :require '(:secret))))))
+    (if found
+	(let ((secret (plist-get found :secret)))
+	  (copy-sequence
+	   (if (functionp secret)
+	       (funcall secret)
+	     secret)))
+      (let ((prompt (format "Jabber password for %s: " bare-jid)))
+	(if (require 'password-cache nil t)
+	    ;; Need to copy the password, as sasl.el wants to erase it.
+	    (copy-sequence
+	     (password-read prompt (jabber-password-key bare-jid)))
+	  (read-passwd prompt))))))
 
 (defun jabber-cache-password (bare-jid password)
   "Cache PASSWORD for BARE-JID."

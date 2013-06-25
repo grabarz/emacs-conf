@@ -1,4 +1,4 @@
-This is jabber.info, produced by makeinfo version 4.8 from jabber.texi.
+This is jabber.info, produced by makeinfo version 4.13 from jabber.texi.
 
 INFO-DIR-SECTION Emacs
 START-INFO-DIR-ENTRY
@@ -318,9 +318,9 @@ File: jabber.info,  Node: Directed presence,  Prev: Resources and priority,  Up:
 You can send "directed presence" with `M-x
 jabber-send-directed-presence'.  This is mostly useful to manage
 transports--sending directed presence is a way to turn them on and off.
-You can also send directed presence to an annoying contact to appear
-as away or offline to that contact.  Note, however, that in both of
-these cases, all subscribed entities will get your next global presence
+You can also send directed presence to an annoying contact to appear as
+away or offline to that contact.  Note, however, that in both of these
+cases, all subscribed entities will get your next global presence
 update.
 
 
@@ -670,7 +670,7 @@ Jabber server hosts such a proxy, it will be found automatically,
 otherwise it needs to be manually configured.
 
    You can check whether your Jabber server has a proxy with `M-x
-jabber-get-disco-items'; see *Note Service discovery::.
+jabber-get-disco-items'; see *note Service discovery::.
 
    To configure a proxy manually, customize the variable
 `jabber-socks5-proxies'.  Putting `proxy.jabber.se' there should work.
@@ -1057,6 +1057,7 @@ interface and do other useful things.
 * Watch buddies::
 * Spell checking::
 * Gmail notifications::
+* Saving groups roll state::
 
 
 File: jabber.info,  Node: Autoaway,  Next: Modeline status,  Up: Useful features
@@ -1266,7 +1267,7 @@ what you receive or what you have already sent.  You may want to add
 Correcting Spelling: (emacs)Spelling.
 
 
-File: jabber.info,  Node: Gmail notifications,  Prev: Spell checking,  Up: Useful features
+File: jabber.info,  Node: Gmail notifications,  Next: Saving groups roll state,  Prev: Spell checking,  Up: Useful features
 
 10.8 Gmail notifications
 ========================
@@ -1307,6 +1308,23 @@ received gmails.  You can customize this behavior by providing your own
      		       (format "echo %s | osd_cat %s"
      			       (shell-quote-argument msg) opts))))
        (defalias 'osd 'message))
+
+
+File: jabber.info,  Node: Saving groups roll state,  Prev: Gmail notifications,  Up: Useful features
+
+10.9 Saving groups roll state
+=============================
+
+You can save roster's groups rollup/rolldown state between sessions.
+To do this you need to add `jabber-roster-save-groups' to
+`jabber-pre-disconnect-hook' and `jabber-roster-restore-groups' to
+`jabber-post-connect-hooks', respectively.
+
+   State saved in private storage on server-side (for each account).
+Note that state restoring working by rolling up groups, rolled up at
+state saving (by default, all groups rolled down). Also note that at
+now, `jabber-pre-disconnect-hook' run only with `jabber-disconnect'
+(not with `jabber-disconnect-one').
 
 
 File: jabber.info,  Node: Message history,  Next: Typing notifications,  Prev: Useful features,  Up: Top
@@ -1578,7 +1596,7 @@ Google Talk just by specifying your Gmail address as JID.  Otherwise,
 you also need to set "network server" to `talk.google.com' and
 "connection type" to "legacy SSL".
 
-   See also *Note Gmail notifications::.
+   See also *note Gmail notifications::.
 
 15.1.2 Upgrade note
 -------------------
@@ -1757,7 +1775,7 @@ hooks, so you can choose which ones you want, or write your own if none
 fit.
 
    Actually, if you don't want to write your own, stop reading this
-section and just read *Note Standard alerts::.
+section and just read *note Standard alerts::.
 
    Many kinds of alerts consist in displaying a text message through a
 certain mechanism.  This text message is provided by a function which
@@ -1834,8 +1852,11 @@ files for contacts matching a regexp in the variables
    The `screen' alerts send a message through the Screen terminal
 manager(1).  They do no harm if called when you don't use Screen.
 
+   The `tmux' alerts send a message through the tmux terminal
+manager(2).
+
    The `ratpoison' alerts send a message through the Ratpoison window
-manager(2).  They do no harm if used when you're not running X, but if
+manager(3).  They do no harm if used when you're not running X, but if
 you are running X with another window manager, the ratpoison processes
 will never exit.  Emacs doesn't hold on to them, though.
 
@@ -1852,13 +1873,13 @@ in rc.lua).
 tool.  The variable `jabber-xmessage-timeout' controls how long the
 alert appears.
 
-   The `osd' alerts send a message onto your screen using XOSD.(3)
+   The `osd' alerts send a message onto your screen using XOSD.(4)
 
    The `libnotify' alerts send a message onto your screen using
 `notification-daemon'.
 
    The `festival' alerts speak the message using the Emacs interface of
-the Festival speech synthesis system(4).
+the Festival speech synthesis system(5).
 
    The `autoanswer' alert is kind of special: it will not show you
 message/muc alert, but instead will automaticaly answer to sender. See
@@ -1884,12 +1905,14 @@ inspiration for your own alerts.
 
    (1) See `http://www.gnu.org/software/screen/'.
 
-   (2) See `http://ratpoison.sourceforge.net/'.
+   (2) See `http://tmux.sourceforge.net/'.
 
-   (3) XOSD can be found at `http://www.ignavus.net/software.html'.
+   (3) See `http://ratpoison.sourceforge.net/'.
+
+   (4) XOSD can be found at `http://www.ignavus.net/software.html'.
 You also need `osd.el' from `http://www.brockman.se/software/osd.el'.
 
-   (4) See `http://www.cstr.ed.ac.uk/projects/festival/'.
+   (5) See `http://www.cstr.ed.ac.uk/projects/festival/'.
 
 
 File: jabber.info,  Node: Presence alerts,  Next: Message alerts,  Prev: Standard alerts,  Up: Customizing alerts
@@ -2597,8 +2620,8 @@ File: jabber.info,  Node: XEP-0049,  Next: XEP-0050,  Prev: XEP-0045,  Up: Proto
 A.9 XEP-0049 (Private XML Storage)
 ==================================
 
-jabber.el contains an implementation of XEP-0049; however it is not used
-for anything right now.
+jabber.el contains an implementation of XEP-0049; It is used for
+bookmarks and roster's groups roll state saving.
 
 
 File: jabber.info,  Node: XEP-0050,  Next: XEP-0054,  Prev: XEP-0049,  Up: Protocol support
@@ -2819,12 +2842,12 @@ Concept index
 * AIM transport:                         Transports.           (line  6)
 * Alert hooks:                           Customizing alerts.   (line  6)
 * Alerts:                                Standard alerts.      (line  6)
-* Autoanswerer:                          Standard alerts.      (line 62)
+* Autoanswerer:                          Standard alerts.      (line 65)
 * autoaway:                              Autoaway.             (line  6)
 * Autojoin chat rooms:                   Configuration.        (line  6)
 * Automatic reconnection:                Reconnecting.         (line  6)
 * avatars:                               Avatars.              (line  6)
-* awesome window manager:                Standard alerts.      (line 46)
+* awesome window manager:                Standard alerts.      (line 49)
 * Backlog:                               Message history.      (line  6)
 * Banning, MUC:                          MUC Administration.   (line 37)
 * Body printers:                         Chat printers.        (line  6)
@@ -2853,7 +2876,7 @@ Concept index
                                                                (line  6)
 * Faces, chat buffer:                    Customizing the chat buffer.
                                                                (line  6)
-* Festival speech synthesis:             Standard alerts.      (line 59)
+* Festival speech synthesis:             Standard alerts.      (line 62)
 * File transfer:                         File transfer.        (line  6)
 * file transfer proxy:                   Sending files.        (line  6)
 * Filling long lines in chat buffer:     Customizing the chat buffer.
@@ -2882,10 +2905,10 @@ Concept index
 * Key bindings:                          Roster buffer.        (line  6)
 * Kicking, MUC:                          MUC Administration.   (line 13)
 * last online:                           Time queries.         (line 10)
-* libnotify:                             Standard alerts.      (line 56)
+* libnotify:                             Standard alerts.      (line 59)
 * links:                                 XMPP URIs.            (line  6)
-* Menus <1>:                             Menu.                 (line  6)
-* Menus:                                 Roster buffer.        (line  6)
+* Menus <1>:                             Roster buffer.        (line  6)
+* Menus:                                 Menu.                 (line  6)
 * message composition:                   Composing messages.   (line  6)
 * Modeline:                              Modeline status.      (line  6)
 * Moderator, MUC:                        MUC Administration.   (line 13)
@@ -2897,10 +2920,10 @@ Concept index
                                                                (line 13)
 * Nick completion in groupchat:          Groupchat.            (line 33)
 * Nickname, changing:                    Groupchat.            (line  9)
-* notification-daemon:                   Standard alerts.      (line 56)
+* notification-daemon:                   Standard alerts.      (line 59)
 * Offline contacts, hiding:              Roster buffer.        (line 33)
 * Online notifications:                  Watch buddies.        (line  6)
-* OSD:                                   Standard alerts.      (line 54)
+* OSD:                                   Standard alerts.      (line 57)
 * Password:                              Account settings.     (line  6)
 * Password change:                       Your home server.     (line  6)
 * Personal information:                  Personal information. (line  6)
@@ -2914,24 +2937,26 @@ Concept index
 * Query groupchat:                       Groupchat.            (line 16)
 * Rare timestamps:                       Customizing the chat buffer.
                                                                (line 54)
-* Ratpoison window manager:              Standard alerts.      (line 36)
+* Ratpoison window manager:              Standard alerts.      (line 39)
 * Reconnect:                             Reconnecting.         (line  6)
 * Registering an account:                Registering an account.
                                                                (line  6)
 * Registration:                          Registration.         (line  6)
 * Removing an account:                   Your home server.     (line  6)
-* Resource <1>:                          Account settings.     (line  6)
-* Resource:                              Resources and priority.
+* Resource <1>:                          Resources and priority.
                                                                (line  6)
+* Resource:                              Account settings.     (line  6)
 * Roles, MUC:                            MUC Administration.   (line 13)
 * Roster buffer, basics:                 Roster buffer.        (line  6)
 * Roster buffer, customizing:            Customizing the roster buffer.
                                                                (line  6)
 * Rotation of history files:             Message history.      (line 28)
-* Sawfish window manager:                Standard alerts.      (line 41)
+* Saving groups roll state:              Saving groups roll state.
+                                                               (line  6)
+* Sawfish window manager:                Standard alerts.      (line 44)
 * Screen terminal manager:               Standard alerts.      (line 33)
 * Scroll:                                Standard alerts.      (line  6)
-* Scroll chat buffers:                   Standard alerts.      (line 66)
+* Scroll chat buffers:                   Standard alerts.      (line 69)
 * Search:                                Search.               (line  6)
 * send directed presence:                Directed presence.    (line  6)
 * Sending files:                         File transfer.        (line  6)
@@ -2940,7 +2965,7 @@ Concept index
 * Sorting the roster:                    Customizing the roster buffer.
                                                                (line  6)
 * Sound effects:                         Standard alerts.      (line 25)
-* Speech synthesis, Festival:            Standard alerts.      (line 59)
+* Speech synthesis, Festival:            Standard alerts.      (line 62)
 * Spell checking:                        Spell checking.       (line  6)
 * Subscribing to someone's presence:     Presence subscription.
                                                                (line  6)
@@ -2950,6 +2975,7 @@ Concept index
                                                                (line 43)
 * Timestamps:                            Customizing the chat buffer.
                                                                (line  6)
+* Tmux terminal manager:                 Standard alerts.      (line 36)
 * Topic, MUC:                            Groupchat.            (line 41)
 * Transports:                            Transports.           (line  6)
 * Truncate:                              Message history.      (line 46)
@@ -2963,13 +2989,13 @@ Concept index
 * Watch:                                 Watch buddies.        (line  6)
 * web browser integration:               XMPP URIs.            (line  6)
 * Whitespace pings:                      Keepalive.            (line 22)
-* Window manager, awesome:               Standard alerts.      (line 46)
-* Window manager, Ratpoison:             Standard alerts.      (line 36)
-* Window manager, Sawfish:               Standard alerts.      (line 41)
-* Window manager, wmii:                  Standard alerts.      (line 44)
-* wmii window manager:                   Standard alerts.      (line 44)
+* Window manager, awesome:               Standard alerts.      (line 49)
+* Window manager, Ratpoison:             Standard alerts.      (line 39)
+* Window manager, Sawfish:               Standard alerts.      (line 44)
+* Window manager, wmii:                  Standard alerts.      (line 47)
+* wmii window manager:                   Standard alerts.      (line 47)
 * XEP-0065 proxy:                        Sending files.        (line  6)
-* xmessage:                              Standard alerts.      (line 50)
+* xmessage:                              Standard alerts.      (line 53)
 * XML console:                           Debug options.        (line  9)
 * XML representation:                    XML representation.   (line  6)
 * xmpp: links:                           XMPP URIs.            (line  6)
@@ -3210,132 +3236,134 @@ Variable index
 * jabber-vcard-avatars-publish:          Avatars.              (line  6)
 * jabber-vcard-avatars-retrieve:         Avatars.              (line  6)
 * jabber-whitespace-ping-interval:       Keepalive.            (line 33)
-* jabber-xmessage-timeout:               Standard alerts.      (line 50)
+* jabber-xmessage-timeout:               Standard alerts.      (line 53)
 
 
 
 Tag Table:
-Node: Top521
-Node: Introduction1360
-Node: Contacts2216
-Node: Basic operation2887
-Node: Do you have a Jabber account?3782
-Node: Registering an account4377
-Node: Connecting5074
-Node: Chatting6149
-Node: Presence7568
-Node: Resources and priority9726
-Node: Directed presence11439
-Node: Presence subscription11979
-Ref: Presence subscription-Footnote-113542
-Node: Roster buffer13637
-Ref: Roster buffer-Footnote-115370
-Node: Groupchat15451
-Node: Configuration18223
-Node: Invitations19630
-Node: Private messages20308
-Node: MUC Administration20931
-Node: Composing messages22534
-Node: File transfer23159
-Ref: File transfer-Footnote-123913
-Node: Receiving files24079
-Node: Sending files25421
-Ref: Sending files-Footnote-127047
-Node: Services27207
-Node: Commands28111
-Node: Registration28686
-Node: Search29289
-Node: Ad-Hoc Commands29644
-Ref: Ad-Hoc Commands-Footnote-131140
-Ref: Ad-Hoc Commands-Footnote-231247
-Node: Service discovery31383
-Node: Browsing32584
-Node: Your home server32944
-Node: Transports33302
-Ref: Transports-Footnote-135704
-Node: User directories35780
-Node: MUC services36183
-Node: Personal information36612
-Ref: Personal information-Footnote-137533
-Node: Avatars37559
-Node: Time queries39107
-Node: Useful features39974
-Node: Autoaway40375
-Ref: Autoaway-Footnote-142290
-Node: Modeline status42357
-Node: Keepalive43069
-Node: Reconnecting45292
-Node: Tracking activity46001
-Node: Watch buddies47681
-Node: Spell checking48378
-Node: Gmail notifications48890
-Node: Message history50673
-Node: Typing notifications53379
-Node: Roster import and export55225
-Node: XMPP URIs56175
-Node: Customization58534
-Node: Account settings58989
-Ref: Account settings-Footnote-161006
-Node: Menu61063
-Node: Customizing the roster buffer61676
-Node: Customizing the chat buffer63864
-Node: Customizing alerts66672
-Node: Standard alerts68856
-Ref: Standard alerts-Footnote-172476
-Ref: Standard alerts-Footnote-272527
-Ref: Standard alerts-Footnote-372576
-Ref: Standard alerts-Footnote-472715
-Node: Presence alerts72774
-Node: Message alerts74176
-Ref: Message alerts-Footnote-175289
-Node: MUC alerts75392
-Node: Info alerts76272
-Node: Hooks76802
-Node: Debug options78130
-Node: Hacking and extending79218
-Node: Connection object79818
-Ref: Connection object-Footnote-181109
-Node: XML representation81241
-Node: JID symbols82752
-Node: Listening for new requests84167
-Node: Sending new requests85419
-Node: Extending service discovery87699
-Node: Providing info88149
-Node: Requesting info89606
-Node: Chat printers92106
-Node: Stanza chains93529
-Node: Protocol support94153
-Node: RFC 392095860
-Node: RFC 392196550
-Node: XEP-000497102
-Node: XEP-001297851
-Node: XEP-002098124
-Node: XEP-002298351
-Node: XEP-003098722
-Node: XEP-004599019
-Node: XEP-004999480
-Node: XEP-005099744
-Node: XEP-0054100109
-Node: XEP-0055100408
-Node: XEP-0065100811
-Node: XEP-0066101345
-Node: XEP-0068101738
-Node: XEP-0077102068
-Node: XEP-0078102629
-Node: XEP-0082102963
-Node: XEP-0085103247
-Node: XEP-0086103570
-Node: XEP-0090103882
-Node: XEP-0091104132
-Node: XEP-0092104418
-Node: XEP-0095104733
-Node: XEP-0096105055
-Node: XEP-0146105515
-Node: XEP-0153105749
-Node: XEP-0199106037
-Node: XEP-0245106215
-Node: Concept index106402
-Node: Function index118373
-Node: Variable index124624
+Node: Top522
+Node: Introduction1361
+Node: Contacts2217
+Node: Basic operation2888
+Node: Do you have a Jabber account?3783
+Node: Registering an account4378
+Node: Connecting5075
+Node: Chatting6150
+Node: Presence7569
+Node: Resources and priority9727
+Node: Directed presence11440
+Node: Presence subscription11980
+Ref: Presence subscription-Footnote-113543
+Node: Roster buffer13638
+Ref: Roster buffer-Footnote-115371
+Node: Groupchat15452
+Node: Configuration18224
+Node: Invitations19631
+Node: Private messages20309
+Node: MUC Administration20932
+Node: Composing messages22535
+Node: File transfer23160
+Ref: File transfer-Footnote-123914
+Node: Receiving files24080
+Node: Sending files25422
+Ref: Sending files-Footnote-127048
+Node: Services27208
+Node: Commands28112
+Node: Registration28687
+Node: Search29290
+Node: Ad-Hoc Commands29645
+Ref: Ad-Hoc Commands-Footnote-131141
+Ref: Ad-Hoc Commands-Footnote-231248
+Node: Service discovery31384
+Node: Browsing32585
+Node: Your home server32945
+Node: Transports33303
+Ref: Transports-Footnote-135705
+Node: User directories35781
+Node: MUC services36184
+Node: Personal information36613
+Ref: Personal information-Footnote-137534
+Node: Avatars37560
+Node: Time queries39108
+Node: Useful features39975
+Node: Autoaway40405
+Ref: Autoaway-Footnote-142320
+Node: Modeline status42387
+Node: Keepalive43099
+Node: Reconnecting45322
+Node: Tracking activity46031
+Node: Watch buddies47711
+Node: Spell checking48408
+Node: Gmail notifications48920
+Node: Saving groups roll state50736
+Node: Message history51451
+Node: Typing notifications54157
+Node: Roster import and export56003
+Node: XMPP URIs56953
+Node: Customization59312
+Node: Account settings59767
+Ref: Account settings-Footnote-161784
+Node: Menu61841
+Node: Customizing the roster buffer62454
+Node: Customizing the chat buffer64642
+Node: Customizing alerts67450
+Node: Standard alerts69634
+Ref: Standard alerts-Footnote-173329
+Ref: Standard alerts-Footnote-273380
+Ref: Standard alerts-Footnote-373424
+Ref: Standard alerts-Footnote-473473
+Ref: Standard alerts-Footnote-573612
+Node: Presence alerts73671
+Node: Message alerts75073
+Ref: Message alerts-Footnote-176186
+Node: MUC alerts76289
+Node: Info alerts77169
+Node: Hooks77699
+Node: Debug options79027
+Node: Hacking and extending80115
+Node: Connection object80715
+Ref: Connection object-Footnote-182006
+Node: XML representation82138
+Node: JID symbols83649
+Node: Listening for new requests85064
+Node: Sending new requests86316
+Node: Extending service discovery88596
+Node: Providing info89046
+Node: Requesting info90503
+Node: Chat printers93003
+Node: Stanza chains94426
+Node: Protocol support95050
+Node: RFC 392096757
+Node: RFC 392197447
+Node: XEP-000497999
+Node: XEP-001298748
+Node: XEP-002099021
+Node: XEP-002299248
+Node: XEP-003099619
+Node: XEP-004599916
+Node: XEP-0049100377
+Node: XEP-0050100658
+Node: XEP-0054101023
+Node: XEP-0055101322
+Node: XEP-0065101725
+Node: XEP-0066102259
+Node: XEP-0068102652
+Node: XEP-0077102982
+Node: XEP-0078103543
+Node: XEP-0082103877
+Node: XEP-0085104161
+Node: XEP-0086104484
+Node: XEP-0090104796
+Node: XEP-0091105046
+Node: XEP-0092105332
+Node: XEP-0095105647
+Node: XEP-0096105969
+Node: XEP-0146106429
+Node: XEP-0153106663
+Node: XEP-0199106951
+Node: XEP-0245107129
+Node: Concept index107316
+Node: Function index119500
+Node: Variable index125751
 
 End Tag Table

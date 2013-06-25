@@ -374,7 +374,8 @@
 (setq jabber-account-list
   '(("grabarz@gmail.com" 
      (:network-server . "talk.google.com")
-        (:connection-type . ssl))))
+        (:connection-type . ssl)
+        (:port . 443))))
 
 ;; yasnippet
 (add-to-list 'load-path "~/.emacs.d/yasnippet")

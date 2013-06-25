@@ -186,7 +186,10 @@ With many prefix arguments, one less is passed to `jabber-connect'."
 	       (jabber-jid-server jid)
 	       (jabber-jid-resource jid)
 	       nil password network-server
-	       port connection-type))))))))
+	       port connection-type)
+	      (setq connected-one t))))
+	(unless connected-one
+	  (message "All configured Jabber accounts are already connected"))))))
 
 ;;;###autoload (autoload 'jabber-connect "jabber" "Connect to the Jabber server and start a Jabber XML stream.\nWith prefix argument, register a new account.\nWith double prefix argument, specify more connection details." t)
 (defun jabber-connect (username server resource &optional
@@ -483,11 +486,16 @@ With double prefix argument, specify more connection details."
      (jabber-fsm-handle-sentinel state-data event))
 
     (:stanza
-     (if (jabber-starttls-process-input fsm (cadr event))
-	 ;; Connection is encrypted.  Send a stream tag again.
-	 (list :connected (plist-put state-data :encrypted t))
-       (message "STARTTLS negotiation failed")
-       (list nil state-data)))
+     (condition-case e
+	 (progn
+	   (jabber-starttls-process-input fsm (cadr event))
+	   ;; Connection is encrypted.  Send a stream tag again.
+	   (list :connected (plist-put state-data :encrypted t)))
+       (error
+	(let* ((msg (concat "STARTTLS negotiation failed: "
+			    (error-message-string e)))
+	       (new-state-data (plist-put state-data :disconnection-reason msg)))
+	  (list nil new-state-data)))))
 
     (:do-disconnect
      (jabber-send-string fsm "</stream:stream>")
@@ -780,14 +788,16 @@ With double prefix argument, specify more connection details."
       (jabber-disconnect-one (jabber-read-account))
     (unless *jabber-disconnecting*	; avoid reentry
       (let ((*jabber-disconnecting* t))
-	(run-hooks 'jabber-pre-disconnect-hook)
-	(dolist (c jabber-connections)
-	  (jabber-disconnect-one c t))
-	(setq jabber-connections nil)
+	(if (null jabber-connections)
+	    (message "Already disconnected")
+	  (run-hooks 'jabber-pre-disconnect-hook)
+	  (dolist (c jabber-connections)
+	    (jabber-disconnect-one c t))
+	  (setq jabber-connections nil)
 
-	(jabber-disconnected)
-	(when (interactive-p)
-	  (message "Disconnected from Jabber server(s)"))))))
+	  (jabber-disconnected)
+	  (when (interactive-p)
+	    (message "Disconnected from Jabber server(s)")))))))
 
 (defun jabber-disconnect-one (jc &optional dont-redisplay)
   "Disconnect from one Jabber server.

@@ -3,10 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads (jabber-info jabber-customize jabber-debug-keep-process-buffers
-;;;;;;  jabber-debug-log-xml jabber-default-priority jabber-default-status
-;;;;;;  jabber-default-show jabber-account-list) "jabber" "jabber.el"
-;;;;;;  (20267 7540))
+;;;### (autoloads (jabber-info jabber-customize jabber-account-list)
+;;;;;;  "jabber" "jabber.el" (20873 37714 0 0))
 ;;; Generated autoloads from jabber.el
 
 (defvar jabber-account-list nil "\
@@ -43,21 +41,6 @@ configure a Google Talk account like this:
 
 (custom-autoload 'jabber-account-list "jabber" t)
 
-(defvar jabber-default-show "" "\
-default show state")
-
-(custom-autoload 'jabber-default-show "jabber" t)
-
-(defvar jabber-default-status "" "\
-default status string")
-
-(custom-autoload 'jabber-default-status "jabber" t)
-
-(defvar jabber-default-priority 10 "\
-default priority")
-
-(custom-autoload 'jabber-default-priority "jabber" t)
-
 (defvar *jabber-current-status* nil "\
 the users current presence status")
 
@@ -66,17 +49,6 @@ the users current presence show")
 
 (defvar *jabber-current-priority* nil "\
 the user's current priority")
-
-(defvar jabber-debug-log-xml nil "\
-Set to non-nil to log all XML i/o in *-jabber-console-JID-* buffer. Set to string to also dump XML i/o in specified file.")
-
-(custom-autoload 'jabber-debug-log-xml "jabber" t)
-
-(defvar jabber-debug-keep-process-buffers nil "\
-If nil, kill process buffers when the process dies.
-Contents of process buffers might be useful for debugging.")
-
-(custom-autoload 'jabber-debug-keep-process-buffers "jabber" t)
 
 (defconst jabber-presence-faces '(("" . jabber-roster-user-online) ("away" . jabber-roster-user-away) ("xa" . jabber-roster-user-xa) ("dnd" . jabber-roster-user-dnd) ("chat" . jabber-roster-user-chatty) ("error" . jabber-roster-user-error) (nil . jabber-roster-user-offline)) "\
 Mapping from presence types to faces")
@@ -210,18 +182,18 @@ Create a buffer for composing a Jabber message.
 
 ;;;***
 
-;;;### (autoloads nil "jabber-console" "jabber-console.el" (20267
-;;;;;;  7540))
+;;;### (autoloads (jabber-process-console) "jabber-console" "jabber-console.el"
+;;;;;;  (20750 20351))
 ;;; Generated autoloads from jabber-console.el
 
-(defvar jabber-buffer-connection nil "\
-The connection used by this buffer.")
+(autoload (quote jabber-process-console) "jabber-console" "\
+Log XML-DATA i/o as XML in \"*-jabber-console-JID-*\" buffer
 
-(make-variable-buffer-local 'jabber-buffer-connection)
+\(fn JC DIRECTION XML-DATA)" nil nil)
 
 ;;;***
 
-;;;### (autoloads nil "jabber-core" "jabber-core.el" (20267 7540))
+;;;### (autoloads nil "jabber-core" "jabber-core.el" (20741 52614))
 ;;; Generated autoloads from jabber-core.el
  (autoload 'jabber-connect-all "jabber" "Connect to all configured Jabber accounts.\nSee `jabber-account-list'.\nIf no accounts are configured (or ARG supplied), call `jabber-connect' interactively." t)
  (autoload 'jabber-connect "jabber" "Connect to the Jabber server and start a Jabber XML stream.\nWith prefix argument, register a new account.\nWith double prefix argument, specify more connection details." t)
@@ -262,23 +234,12 @@ See http://code.google.com/apis/talk/jep_extensions/gmail.html#requestmail
 
 ;;;***
 
-;;;### (autoloads (jabber-whitespace-ping-start jabber-whitespace-ping-interval
-;;;;;;  jabber-keepalive-start jabber-keepalive-timeout jabber-keepalive-interval
+;;;### (autoloads (jabber-whitespace-ping-start jabber-keepalive-start
 ;;;;;;  jabber-keepalive) "jabber-keepalive" "jabber-keepalive.el"
-;;;;;;  (20267 7540))
+;;;;;;  (20873 32516 0 0))
 ;;; Generated autoloads from jabber-keepalive.el
 
 (let ((loads (get 'jabber-keepalive 'custom-loads))) (if (member '"jabber-keepalive" loads) nil (put 'jabber-keepalive 'custom-loads (cons '"jabber-keepalive" loads))))
-
-(defvar jabber-keepalive-interval 600 "\
-Interval in seconds between connection checks.")
-
-(custom-autoload 'jabber-keepalive-interval "jabber-keepalive" t)
-
-(defvar jabber-keepalive-timeout 20 "\
-Seconds to wait for response from server.")
-
-(custom-autoload 'jabber-keepalive-timeout "jabber-keepalive" t)
 
 (autoload 'jabber-keepalive-start "jabber-keepalive" "\
 Activate keepalive.
@@ -291,19 +252,6 @@ The JC argument makes it possible to add this function to
 for all accounts regardless of the argument.
 
 \(fn &optional JC)" t nil)
-
-(defvar jabber-whitespace-ping-interval 30 "\
-Send a space character to the server with this interval, in seconds.
-
-This is a traditional remedy for a number of problems: to keep NAT
-boxes from considering the connection dead, to have the OS discover
-earlier that the connection is lost, and to placate servers which rely
-on the client doing this, e.g. Openfire.
-
-If you want to verify that the server is able to answer, see
-`jabber-keepalive-start' for another mechanism.")
-
-(custom-autoload 'jabber-whitespace-ping-interval "jabber-keepalive" t)
 
 (autoload 'jabber-whitespace-ping-start "jabber-keepalive" "\
 Start sending whitespace pings at regular intervals.
@@ -327,7 +275,7 @@ Global Jabber keymap (usually under C-x C-j)")
 ;;;***
 
 ;;;### (autoloads (jabber-display-menu) "jabber-menu" "jabber-menu.el"
-;;;;;;  (20267 7540))
+;;;;;;  (20873 37750 0 0))
 ;;; Generated autoloads from jabber-menu.el
 
 (defvar jabber-menu (let ((map (make-sparse-keymap "jabber-menu"))) (define-key map [jabber-menu-connect] '("Connect" . jabber-connect-all)) (define-key map [jabber-menu-nextmsg] '("Next unread message" . jabber-activity-switch-to)) (define-key map [jabber-menu-disconnect] '("Disconnect" . jabber-disconnect)) (define-key map [jabber-menu-roster] '("Switch to roster" . jabber-switch-to-roster-buffer)) (define-key map [jabber-menu-customize] '("Customize" . jabber-customize)) (define-key map [jabber-menu-info] '("Help" . jabber-info)) (define-key map [jabber-menu-status] (cons "Set Status" (make-sparse-keymap "set-status"))) (define-key map [jabber-menu-status jabber-menu-status-chat] '("Chatty" lambda nil (interactive) (jabber-send-presence "chat" (jabber-read-with-input-method "status message: " *jabber-current-status* '*jabber-status-history*) *jabber-current-priority*))) (define-key map [jabber-menu-status jabber-menu-status-dnd] '("Do not Disturb" lambda nil (interactive) (jabber-send-presence "dnd" (jabber-read-with-input-method "status message: " *jabber-current-status* '*jabber-status-history*) *jabber-current-priority*))) (define-key map [jabber-menu-status jabber-menu-status-xa] '("Extended Away" . jabber-send-xa-presence)) (define-key map [jabber-menu-status jabber-menu-status-away] '("Away" . jabber-send-away-presence)) (define-key map [jabber-menu-status jabber-menu-status-online] '("Online" . jabber-send-default-presence)) map))
@@ -347,27 +295,14 @@ is non-nil.")
 
 ;;;### (autoloads (jabber-muc-private-message-p jabber-muc-sender-p
 ;;;;;;  jabber-muc-message-p jabber-muc-vcard-get jabber-muc-private-get-buffer
-;;;;;;  jabber-muc-get-buffer jabber-muc-autojoin jabber-muc-default-nicknames)
-;;;;;;  "jabber-muc" "jabber-muc.el" (20267 7540))
+;;;;;;  jabber-muc-get-buffer) "jabber-muc" "jabber-muc.el" (20873
+;;;;;;  32572 0 0))
 ;;; Generated autoloads from jabber-muc.el
 
 (defvar *jabber-active-groupchats* nil "\
 alist of groupchats and nicknames
 Keys are strings, the bare JID of the room.
 Values are strings.")
-
-(defvar jabber-muc-default-nicknames nil "\
-Default nickname for specific MUC rooms.")
-
-(custom-autoload 'jabber-muc-default-nicknames "jabber-muc" t)
-
-(defvar jabber-muc-autojoin nil "\
-List of MUC rooms to automatically join on connection.
-This list is saved in your Emacs customizations.  You can also store
-such a list on the Jabber server, where it is available to every
-client; see `jabber-edit-bookmarks'.")
-
-(custom-autoload 'jabber-muc-autojoin "jabber-muc" t)
 
 (defvar jabber-muc-printers 'nil "\
 List of functions that may be able to print part of a MUC message.
@@ -424,7 +359,7 @@ Optional argument GROUP to look.
 ;;;***
 
 ;;;### (autoloads (jabber-send-default-presence jabber-send-presence)
-;;;;;;  "jabber-presence" "jabber-presence.el" (20267 7540))
+;;;;;;  "jabber-presence" "jabber-presence.el" (20837 58250 0 0))
 ;;; Generated autoloads from jabber-presence.el
 
 (autoload 'jabber-send-presence "jabber-presence" "\
@@ -468,17 +403,17 @@ ERROR-CLOSURE-DATA are used as in `jabber-send-iq'.
 ;;;***
 
 ;;;### (autoloads (jabber-roster-update jabber-switch-to-roster-buffer)
-;;;;;;  "jabber-roster" "jabber-roster.el" (20267 7540))
+;;;;;;  "jabber-roster" "jabber-roster.el" (20741 52614))
 ;;; Generated autoloads from jabber-roster.el
 
-(autoload 'jabber-switch-to-roster-buffer "jabber-roster" "\
+(autoload (quote jabber-switch-to-roster-buffer) "jabber-roster" "\
 Switch to roster buffer.
 Optional JC argument is ignored; it's there so this function can
 be used in `jabber-post-connection-hooks'.
 
 \(fn &optional JC)" t nil)
 
-(autoload 'jabber-roster-update "jabber-roster" "\
+(autoload (quote jabber-roster-update) "jabber-roster" "\
 Update roster, in memory and on display.
 Add NEW-ITEMS, update CHANGED-ITEMS and remove DELETED-ITEMS, all
 three being lists of JID symbols.
@@ -499,10 +434,10 @@ three being lists of JID symbols.
 ;;;;;;  "jabber-register.el" "jabber-sasl.el" "jabber-sawfish.el"
 ;;;;;;  "jabber-screen.el" "jabber-search.el" "jabber-si-client.el"
 ;;;;;;  "jabber-si-common.el" "jabber-si-server.el" "jabber-socks5.el"
-;;;;;;  "jabber-time.el" "jabber-truncate.el" "jabber-util.el" "jabber-vcard-avatars.el"
-;;;;;;  "jabber-vcard.el" "jabber-version.el" "jabber-watch.el" "jabber-widget.el"
-;;;;;;  "jabber-wmii.el" "jabber-xmessage.el" "jabber-xml.el" "srv.el")
-;;;;;;  (20267 10066 548104))
+;;;;;;  "jabber-time.el" "jabber-tmux.el" "jabber-truncate.el" "jabber-util.el"
+;;;;;;  "jabber-vcard-avatars.el" "jabber-vcard.el" "jabber-version.el"
+;;;;;;  "jabber-watch.el" "jabber-widget.el" "jabber-wmii.el" "jabber-xmessage.el"
+;;;;;;  "jabber-xml.el" "srv.el") (20873 37787 653061 0))
 
 ;;;***
 
