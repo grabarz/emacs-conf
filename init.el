@@ -49,8 +49,12 @@
 
 ;; themesy
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'zenburn t)
+;(load-theme 'zenburn t)
 ;(load-theme 'inkpot t)
+;(load-theme 'fogus t)
+;(load-theme 'hickey t)
+;(load-theme 'dorsey t)
+(load-theme 'wilson t)
 
 ;; funkcja odpalajaca zamiennik cmd.exe w windowsie
 (defun run-cmd-exe()
@@ -339,17 +343,15 @@
 (add-hook 'c-mode-common-hook 'grabarz-clang-mode-common-hook)
 
 ;; eclim
-(when windowsp
-  (add-to-list 'load-path "~/.emacs.d/emacs-eclim/")
-  (require 'eclim)
-  (global-eclim-mode)
-  (setq eclim-executable "c:\\eclipse\\eclipse\\eclim.bat")
-  (setq help-at-pt-display-when-idle t)
-  (setq help-at-pt-timer-delay 0.1)
-  (help-at-pt-set-timer)
-  (require 'ac-emacs-eclim-source)
-  (ac-emacs-eclim-config)
-  (add-to-list 'eclim--file-coding-system-mapping '("windows-1250-dos" . "windows-1250")))
+;; (add-to-list 'load-path "~/.emacs.d/eclim/")
+;; (require 'eclim)
+;; (global-eclim-mode)
+;; (setq eclim-executable "~/.emacs.d/eclimd")
+;; (setq help-at-pt-display-when-idle t)
+;; (setq help-at-pt-timer-delay 0.1)
+;; (help-at-pt-set-timer)
+;; (require 'ac-emacs-eclim-source)
+;; (ac-emacs-eclim-config)
 
 ;; global
 (autoload 'gtags-mode "gtags" "" t)
@@ -370,6 +372,11 @@
 ;; jabber.el
 (add-to-list 'load-path "~/.emacs.d/jabber/")
 (require 'jabber-autoloads)
+
+(add-hook 'jabber-chat-mode-hook 'goto-address)
+
+;(custom-set-variables
+; '(jabber-auto-reconnect t))
 
 (setq jabber-account-list
   '(("grabarz@gmail.com" 
