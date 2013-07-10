@@ -25,7 +25,10 @@
       (wilson-stained-orange        "#B97E56")
       (wilson-darker-stained-orange "#A56F4B")
       (wilson-stained-yellow        "#CFB980")
-      (wilson-darker-stained-yellow "#B9A572"))
+      (wilson-darker-stained-yellow "#B9A572")
+      (grabarz-jabber-online        "#FFFF00")
+      (grabarz-jabber-away          "#00FF00")
+)
   (custom-theme-set-faces
    'wilson
 
@@ -65,7 +68,13 @@
    `(powerline-active1 ((t (:background ,wilson-dark-gray :foreground ,wilson-stained-orange))))
    `(powerline-active2 ((t (:background ,wilson-lighter-gray :foreground ,wilson-darker-stained-white))))
    `(powerline-inactive1 ((t (:background ,wilson-darker-gray :foreground ,wilson-stained-white))))
-   `(powerline-inactive2 ((t (:background ,wilson-dark-gray :foreground ,wilson-darker-stained-white))))))
+   `(powerline-inactive2 ((t (:background ,wilson-dark-gray :foreground ,wilson-darker-stained-white))))
+
+   `(jabber-chat-prompt-local ((t (:foreground ,wilson-stained-yellow))))
+   `(jabber-chat-prompt-foreign ((t(:foreground ,wilson-stained-orange))))
+   `(jabber-roster-user-xa ((t (:foreground ,grabarz-jabber-away))))
+   `(jabber-roster-user-online ((t (:foreground ,grabarz-jabber-online))))
+   `(jabber-roster-user-away ((t (:foreground ,grabarz-jabber-away))))))
 
 ;;;###autoload
 (when load-file-name
