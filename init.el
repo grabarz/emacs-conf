@@ -16,6 +16,7 @@
              "/usr/bin"
              "/usr/sbin"
              "/usr/local/bin"
+             "/usr/local/sbin"
              "/opt/local/bin"
              "/opt/local/sbin")))
       (setq exec-path (append exec-path grabarz-path))
@@ -24,12 +25,12 @@
 ;; ustawienie rozmiarow okienka
 (if windowsp
     (setq initial-frame-alist `((left . 0) (top . 0) (width . 232) (height . 63)))
-  (setq initial-frame-alist `((left . 0) (top . 0) (width . 210) (height . 57))))
+  (setq initial-frame-alist `((left . 0) (top . 0) (width . 210) (height . 68))))
 
 ;; ustawienie czcionki
 (if windowsp
     (add-to-list 'default-frame-alist '(font . "Consolas-8"))
-  (add-to-list 'default-frame-alist '(font . "Monaco-10")))
+  (add-to-list 'default-frame-alist '(font . "Menlo-10")))
 
 ;; fonty - zeby sie nie mulilo
 (global-font-lock-mode t)
@@ -158,13 +159,6 @@
 (define-key slime-mode-map (kbd "C-c t") 'slime-edit-definition)
 (define-key slime-mode-map (kbd "M-.") 'auto-complete)
 
-;; scheme mode, quack (scheme)
-(require 'quack)
-
-(setq scheme-program-name "csi -:c")
-
-(autoload 'run-scheme "csi -:c" "Run an inferior Scheme process." t)
-
 ;; ustawienie lisp i scheme mode
 (add-hook 'lisp-mode-hook
           (lambda ()
@@ -185,14 +179,21 @@
  (eval-after-load "auto-complete"
    '(add-to-list 'ac-modes 'slime-repl-mode))
 
+;; astyle
+(defun grabarz-astyle-this-buffer (pmin pmax)
+  (interactive "r")
+  (shell-command-on-region pmin pmax
+                           "astyle --style=bsd --indent=force-tab --indent-col1-comments --min-conditional-indent=0 --pad-oper --pad-header --align-pointer=type --align-reference=type --break-closing-brackets --break-elseifs --mode=c"
+                           (current-buffer) t 
+                           (get-buffer-create "*Astyle Errors*") t))
+
 ;; ustawienia cc-mode
 (defun grabarz-c-indent-setup ()
   (c-set-offset 'arglist-intro '+)
   (c-set-offset 'arglist-cont-nonempty '+)
   (c-set-offset 'case-label '+)
   (define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
-  (when windowsp
-    (c-set-offset 'innamespace '-)))
+  (c-set-offset 'innamespace '-))
 
 (setq c-default-style "bsd" c-basic-offset 4 )
 (setq-default c-basic-offset 4 tab-width 4 indent-tabs-mode t c-argdecl-indent 0)
@@ -321,14 +322,15 @@
 (require 'auto-complete-clang)
 
 (defcustom grabarz-include-paths
-  '("/usr/clang-ide/lib/c++/v1/"
-    "./include/"
+  '("./include/"
     "/opt/local/include"
     "/usr/include"
     "./"
     "../"
     "../../"
-    "../../../")
+    "../../../"
+    "../../../../"
+    "../../../../../")
   "*Customowe includy."
   :group 'grabarz-clang
   :type '(repeat directory))
@@ -398,11 +400,25 @@
 (setq vc-handled-backends (quote (Git Hg)))
 
 ;; magit
+(add-to-list 'load-path "~/.emacs.d/git-modes")
 (add-to-list 'load-path "~/.emacs.d/magit")
 (require 'magit)
 (require 'magit-blame)
 
 ;; generowanie guidow
+(defun grabarz-random-guid-str ()
+  (upcase (md5 (format "%s%s%s%s%s%s%s%s%s%s"
+                       (user-uid)
+                       (emacs-pid)
+                       (system-name)
+                       (user-full-name)
+                       (current-time)
+                       (emacs-uptime)
+                       (garbage-collect)
+                       (buffer-string)
+                       (random)
+                       (recent-keys)))))
+
 (defun grabarz-random-guid (arg)
   "Insert a UUID. This uses a simple hashing of variable data."
   (interactive "P")
@@ -461,7 +477,7 @@
     (let ((column (current-column)))
       (beginning-of-line)
       (when (or (> arg 0) (not (bobp)))
-        (forward-line )
+        (forward-line 1)
         (when (or (< arg 0) (not (eobp)))
           (transpose-lines arg))
         (forward-line -1))
@@ -543,15 +559,3 @@
 ;; (setq user-mail-address "grabarz@gmail.com"
 ;;   user-full-name "Piotr Grabowski"
 ;;   message-cite-function 'message-cite-original-without-signature)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(quack-programs (quote ("csi -:c" "bigloo" "csi" "csi -hygienic" "gosh" "gracket" "gsi" "gsi ~~/syntax-case.scm -" "guile" "kawa" "mit-scheme" "racket" "racket -il typed/racket" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

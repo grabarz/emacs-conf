@@ -1,0 +1,4 @@
+#name: typedef shared_ptr<...> ...Ptr
+#key: ptr
+# --
+typedef std::shared_ptr<$1> $1Ptr;

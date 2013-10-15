@@ -1,0 +1,9 @@
+#name: #ifndef _XXX_ ...
+#key: ifn
+# --
+#ifndef ${1:_`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_HPP_`(grabarz-random-guid-str)`}
+#define $1
+
+$0
+
+#endif // $1

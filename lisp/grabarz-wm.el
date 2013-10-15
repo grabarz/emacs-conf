@@ -57,6 +57,7 @@
     (ad-enable-advice 'set-window-buffer 'around 'grabarz-wm-ad)
     win))
 
+;; todo dorobic zamykanie konsoli 
 (defadvice set-window-buffer (around
                               grabarz-wm-ad
                               (win buf &optional km))
