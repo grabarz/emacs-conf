@@ -1,4 +1,5 @@
 *~
+*.elc
 eshell/
 auto-save-list/
 .git/
