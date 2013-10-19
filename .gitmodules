@@ -1,0 +1,12 @@
+[submodule "ensime"]
+	path = ensime
+	url = https://github.com/aemoncannon/ensime.git
+[submodule "scala-mode2"]
+	path = scala-mode2
+	url = https://github.com/hvesalai/scala-mode2.git
+[submodule "git-modes"]
+	path = git-modes
+	url = https://github.com/magit/git-modes.git
+[submodule "magit"]
+	path = magit
+	url = https://github.com/magit/magit.git

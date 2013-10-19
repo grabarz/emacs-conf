@@ -1,5 +1,8 @@
+*~
 eshell/
 auto-save-list/
 .git/
 ac-comphist.dat
 .DS_Store
+places
+ensime/

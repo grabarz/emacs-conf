@@ -341,7 +341,7 @@
               (append grabarz-include-paths)))
 
 (defun grabarz-clang-mode-common-hook()
-  (define-key c-mode-base-map (kbd "M-/") 'ac-complete-clang))
+  (define-key c-mode-base-map (kbd "<C-return>") 'ac-complete-clang))
 (add-hook 'c-mode-common-hook 'grabarz-clang-mode-common-hook)
 
 ;; eclim
@@ -369,7 +369,7 @@
 
 ;; find-file-in-repository
 (require 'find-file-in-repository)
-(global-set-key (kbd "C-c f") 'find-file-in-repository)
+(global-set-key (kbd "C-c C-f") 'find-file-in-repository)
 
 ;; jabber.el
 (add-to-list 'load-path "~/.emacs.d/jabber/")
@@ -394,6 +394,21 @@
 (add-hook 'c-mode-common-hook
    '(lambda ()
       (yas/minor-mode)))
+
+;; scala-mode2 & ensime
+(add-to-list 'load-path "~/.emacs.d/scala-mode2/")
+(require 'scala-mode2)
+
+(add-to-list 'load-path "~/.emacs.d/ensime/elisp/")
+(require 'ensime)
+
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+(add-hook 'scala-mode-hook
+   '(lambda ()
+      (yas/minor-mode)
+      (setq tab-width 4)
+      (setq tab-stop-list (number-sequence 4 200 4))
+      (local-set-key (kbd "RET") 'reindent-then-newline-and-indent)))
 
 ;; vc - zostawienie tylko gita i hg
 (setq vc-cvs-stay-local nil)
@@ -518,7 +533,7 @@
 (global-set-key (kbd "M-2") '(lambda () (interactive) (grabarz-wm-other-window 1)))
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
-(global-set-key (kbd "M-.") '(lambda () (interactive) (auto-complete)))
+(global-set-key (kbd "<C-return>") '(lambda () (interactive) (auto-complete)))
 (if windowsp
     (global-set-key (kbd "M-`") 'grabarz-wm-console-activate-hide)
   (global-set-key (kbd "M-§") 'grabarz-wm-console-activate-hide))
