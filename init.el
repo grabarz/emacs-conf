@@ -116,7 +116,14 @@
 (setq require-final-newline nil)
 
 ;; ustawienia aspell'a
-(setq ispell-program-name "/opt/local/bin/aspell")
+(setq ispell-program-name "/usr/local/bin/aspell"
+      ispell-extra-args '("--sug-mode=ultra" "-a" "-i" "utf-8"))
+
+;; org-mode
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(add-hook 'org-mode-hook
+          (lambda()
+            (flyspell-mode 1)))
 
 ;; auto-complete
 (add-to-list 'load-path "~/.emacs.d/auto-complete")
@@ -457,22 +464,22 @@
                     (substring myStr 20 32)))))
 
 ;; grabarz-wm
-(require 'grabarz-wm)
-(setq grabarz-wm-console-regexp
-      '("*Completions*"
-        "*Ido Completions*"
-        "*Help*"
-        "*grep*"
-        "*compilation*"
-        "*ansi-term*"
-        "*Backtrace*"
-        "*eshell*"
-        "*scheme*"
-        "*inferior-lisp*"
-        "*slime-description*"
-        "*slime-repl sbcl*"
-        "*Fuzzy Completions*"))
-(grabarz-wm)
+;; (require 'grabarz-wm)
+;; (setq grabarz-wm-console-regexp
+;;       '("*Completions*"
+;;         "*Ido Completions*"
+;;         "*Help*"
+;;         "*grep*"
+;;         "*compilation*"
+;;         "*ansi-term*"
+;;         "*Backtrace*"
+;;         "*eshell*"
+;;         "*scheme*"
+;;         "*inferior-lisp*"
+;;         "*slime-description*"
+;;         "*slime-repl sbcl*"
+;;         "*Fuzzy Completions*"))
+;; (grabarz-wm)
 
 ;; funkcje operujace na tekscie
 (defun grabarz-move-text-internal (arg)
@@ -529,8 +536,10 @@
 (global-set-key (kbd "C-M-0") 'grabarz-move-text-down)
 (global-set-key (kbd "M-n") 'forward-paragraph)
 (global-set-key (kbd "M-p") 'backward-paragraph)
-(global-set-key (kbd "M-1") '(lambda () (interactive) (grabarz-wm-other-window -1)))
-(global-set-key (kbd "M-2") '(lambda () (interactive) (grabarz-wm-other-window 1)))
+;; (global-set-key (kbd "M-1") '(lambda () (interactive) (grabarz-wm-other-window -1)))
+;; (global-set-key (kbd "M-2") '(lambda () (interactive) (grabarz-wm-other-window 1)))
+(global-set-key (kbd "M-1") '(lambda () (interactive) (other-window -1)))
+(global-set-key (kbd "M-2") '(lambda () (interactive) (other-window 1)))
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 (global-set-key (kbd "<C-return>") '(lambda () (interactive) (auto-complete)))

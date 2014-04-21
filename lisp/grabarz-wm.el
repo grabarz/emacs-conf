@@ -13,6 +13,9 @@
 (defvar grabarz-wm-console-window-tmp nil
   "Tymczasowa zmienna.")
 
+(defvar grabarz-wm-current-window-tmp nil
+  "Tymczasowa zmienna.")
+
 (defvar grabarz-wm-old-set-window-buffer nil
   "Stara wersja funkcji.")
 
@@ -55,9 +58,25 @@
     (ad-disable-advice 'set-window-buffer 'around 'grabarz-wm-ad)
     (set-window-buffer win buffer-or-name)
     (ad-enable-advice 'set-window-buffer 'around 'grabarz-wm-ad)
+    (message "display-buffer")
     win))
 
+
 ;; todo dorobic zamykanie konsoli 
+;; (defadvice set-window-buffer (around
+;;                               grabarz-wm-ad
+;;                               (win buf &optional km))
+;;   (let ((bname (if (bufferp buf) (buffer-name buf) buf)))
+;;     (if (grabarz-wm-check-regexp grabarz-wm-console-regexp bname)
+;;         (progn
+;;           (when (not (window-live-p grabarz-wm-console-window))
+;;             (grabarz-wm-console-window-make))
+;;           (setq win grabarz-wm-console-window))
+;;       (when (equal grabarz-wm-console-window (selected-window))
+;;         (setq win (next-window (selected-window) 0))))
+;;     (message "set-window-buffer")
+;;     ad-do-it))
+
 (defadvice set-window-buffer (around
                               grabarz-wm-ad
                               (win buf &optional km))
@@ -67,9 +86,10 @@
           (when (not (window-live-p grabarz-wm-console-window))
             (grabarz-wm-console-window-make))
           (setq win grabarz-wm-console-window))
-      (when (equal grabarz-wm-console-window (selected-window))
+      (if (equal grabarz-wm-console-window (selected-window))
         (setq win (next-window (selected-window) 0))))
     ad-do-it))
+
 
 ; interfejs
 
@@ -94,8 +114,12 @@
   (setq grabarz-wm-old-set-window-buffer 'set-window-buffer)
   (setq display-buffer-function 'grabarz-wm-display-buffer-function)
   (ad-activate 'set-window-buffer t)                                
-  (add-hook 'minibuffer-setup-hook '(lambda () (setq grabarz-wm-console-window-tmp grabarz-wm-console-window)))
-  (add-hook 'minibuffer-exit-hook '(lambda () (setq grabarz-wm-console-window grabarz-wm-console-window-tmp))))
+  (add-hook 'minibuffer-setup-hook
+            '(lambda ()
+               (setq grabarz-wm-current-window-tmp (selected-window))
+               (setq grabarz-wm-console-window-tmp grabarz-wm-console-window)))
+  (add-hook 'minibuffer-exit-hook
+            '(lambda () (setq grabarz-wm-console-window grabarz-wm-console-window-tmp))))
 
 (defun grabarz-wm-quit ()
   "*Stops grabarz-wm."
