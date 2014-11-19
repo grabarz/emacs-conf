@@ -10,3 +10,6 @@
 [submodule "slime"]
 	path = slime
 	url = https://github.com/slime/slime.git
+[submodule "geiser"]
+	path = geiser
+	url = http://git.sv.gnu.org/r/geiser.git

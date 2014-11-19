@@ -25,7 +25,7 @@
 ;; ustawienie rozmiarow okienka
 (if windowsp
     (setq initial-frame-alist `((left . 0) (top . 0) (width . 232) (height . 63)))
-  (setq initial-frame-alist `((left . 0) (top . 0) (width . 210) (height . 68))))
+  (setq initial-frame-alist `((left . 0) (top . 0) (width . 210) (height . 67))))
 
 ;; ustawienie czcionki
 (if windowsp
@@ -50,12 +50,15 @@
 
 ;; themesy
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'gruvbox t)
+;(load-theme 'ujelly)
+;(load-theme 'soothe)
 ;(load-theme 'zenburn t)
 ;(load-theme 'inkpot t)
 ;(load-theme 'fogus t)
 ;(load-theme 'hickey t)
 ;(load-theme 'dorsey t)
-(load-theme 'wilson t)
+;(load-theme 'wilson t)
 
 ;; funkcja odpalajaca zamiennik cmd.exe w windowsie
 (defun run-cmd-exe()
@@ -117,7 +120,7 @@
 
 ;; ustawienia aspell'a
 (setq ispell-program-name "/usr/local/bin/aspell"
-      ispell-extra-args '("--sug-mode=ultra" "-a" "-i" "utf-8"))
+      ispell-extra-args '("--sug-mode=ultra" "-a" "-l" "pl" "--encoding=utf-8"))
 
 ;; org-mode
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
@@ -178,6 +181,8 @@
 (add-hook 'scheme-mode-hook
           (lambda ()
             (setq indent-tabs-mode nil)))
+
+(load-file "~/.emacs.d/geiser/elisp/geiser.el")
 
 ;; ac-slime
 (require 'ac-slime)
@@ -583,3 +588,17 @@
 ;; (setq user-mail-address "grabarz@gmail.com"
 ;;   user-full-name "Piotr Grabowski"
 ;;   message-cite-function 'message-cite-original-without-signature)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("5cbfbbc76f64d4035c2d1647f2fac8d89080e3d9f9d0f3b57a1ac886d246276e" "27713778ce0291c1002fac10ba08f6de8430a6f24a506b821293b9eda806dfcc" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
