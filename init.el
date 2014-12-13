@@ -93,6 +93,10 @@
       (previous-buffer)
     (eshell)))
 
+;; window-numbering
+(require 'window-numbering)
+(window-numbering-mode)
+
 ;; ack
 (require 'ack)
 
@@ -543,8 +547,8 @@
 (global-set-key (kbd "M-p") 'backward-paragraph)
 ;; (global-set-key (kbd "M-1") '(lambda () (interactive) (grabarz-wm-other-window -1)))
 ;; (global-set-key (kbd "M-2") '(lambda () (interactive) (grabarz-wm-other-window 1)))
-(global-set-key (kbd "M-1") '(lambda () (interactive) (other-window -1)))
-(global-set-key (kbd "M-2") '(lambda () (interactive) (other-window 1)))
+;;(global-set-key (kbd "M-1") '(lambda () (interactive) (other-window -1)))
+;;(global-set-key (kbd "M-2") '(lambda () (interactive) (other-window 1)))
 (global-set-key (kbd "M-[") 'previous-buffer)
 (global-set-key (kbd "M-]") 'next-buffer)
 (global-set-key (kbd "<C-return>") '(lambda () (interactive) (auto-complete)))
